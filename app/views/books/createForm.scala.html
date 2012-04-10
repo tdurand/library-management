@@ -11,10 +11,11 @@
     @form(routes.Books.save()) {
         
         <fieldset>
-        
-            @inputText(bookForm("isbn"), 'label -> "ISBN")
-            
 
+            @inputText(bookForm("title"), 'label -> "Title")
+            @inputText(bookForm("isbn"), 'label -> "ISBN")
+            @inputText(bookForm("idLibrary"), 'label -> "idLibrary")
+            
         </fieldset>
         
         <div class="actions">

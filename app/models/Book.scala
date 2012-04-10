@@ -70,13 +70,13 @@ object Book {
     DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into book values ('', 
-            {title}, {idLibrary}, {isbn}
+          insert into book values (nextval('book_seq'), 
+            {idLibrary},{title},{isbn}
           )
         """
       ).on(
-        'title -> book.title,
         'idLibrary -> book.idLibrary,
+        'title -> book.title,
         'isbn -> book.isbn
       ).executeUpdate()
     }
