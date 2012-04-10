@@ -7,4 +7,3 @@ import anorm._
 import anorm.SqlParser._
 
 case class User(id : Pk[Long]= NotAssigned,idLibrary:Long,firstName:String)
-

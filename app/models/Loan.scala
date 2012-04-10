@@ -6,5 +6,4 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class Library(id : Pk[Long]= NotAssigned,name:String)
-
+case class Loan(id : Pk[Long]= NotAssigned,idUser:Long,idPhysicalBook:Long,dateBorrowed:Long,dateDue:Long,dateReturned:Long)

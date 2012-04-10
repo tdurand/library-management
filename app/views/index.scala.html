@@ -1,7 +1,9 @@
-@(message: String)
-
-@main("Welcome to Play 2.0") {
+@main {
     
-    @play20.welcome(message)
+    <h1>Dashboard</h1>
     
+    <ul>
+        <li><a href="@routes.Books.index">Books</a></li>
+        <li><a href="@routes.Users.index">Users</a></li>
+    </ul>
 }
