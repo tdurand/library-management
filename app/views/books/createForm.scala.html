@@ -1,0 +1,27 @@
+@(bookForm: Form[Book])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
+
+@main {
+    
+    <h1>Add a book</h1>
+    
+    @form(routes.Books.save()) {
+        
+        <fieldset>
+        
+            @inputText(bookForm("isbn"), 'label -> "ISBN")
+            
+
+        </fieldset>
+        
+        <div class="actions">
+            <input type="submit" value="Create this book" class="btn primary"> or 
+            <a href="@routes.Books.list()" class="btn">Cancel</a> 
+        </div>
+        
+    }
+    
+}

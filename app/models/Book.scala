@@ -8,6 +8,14 @@ import anorm.SqlParser._
 
 case class Book(id : Pk[Long]= NotAssigned,idLibrary:Long,title: String,isbn : String)
 
+/**
+ * Helper for pagination.
+ */
+case class Page[A](items: Seq[A], page: Int, offset: Long, total: Long) {
+  lazy val prev = Option(page - 1).filter(_ >= 0)
+  lazy val next = Option(page + 1).filter(_ => (offset + items.size) < total)
+}
+
 object Book {
   
   // -- Parsers
@@ -48,7 +56,7 @@ object Book {
         """
       ).on(
         'id -> id,
-        'name -> book.title,
+        'title -> book.title,
         'idLibrary -> book.idLibrary,
         'isbn -> book.isbn
       ).executeUpdate()
@@ -63,11 +71,11 @@ object Book {
       SQL(
         """
           insert into book values ('', 
-            {name}, {idLibrary}, {isbn}
+            {title}, {idLibrary}, {isbn}
           )
         """
       ).on(
-        'name -> book.title,
+        'title -> book.title,
         'idLibrary -> book.idLibrary,
         'isbn -> book.isbn
       ).executeUpdate()
@@ -81,5 +89,42 @@ object Book {
     DB.withConnection { implicit connection =>
       SQL("delete from book where id = {id}").on('id -> id).executeUpdate()
     }
+  }
+  
+  /**
+   * Return a page of Book.
+   *
+   * @param page Page to display
+   * @param pageSize Number of books per page
+   * @param orderBy Book property used for sorting
+   */
+  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1): Page[Book] = {
+    
+    val offest = pageSize * page
+    
+    DB.withConnection { implicit connection =>
+      
+      val books = SQL(
+        """
+          select * from book 
+          order by {orderBy} nulls last
+          limit {pageSize} offset {offset}
+        """
+      ).on(
+        'pageSize -> pageSize, 
+        'offset -> offest,
+        'orderBy -> orderBy
+      ).as(Book.simple *)
+
+      val totalRows = SQL(
+        """
+          select count(*) from book 
+        """
+      ).as(scalar[Long].single)
+
+      Page(books, page, offest, totalRows)
+      
+    }
+    
   }
 }

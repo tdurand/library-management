@@ -5,7 +5,23 @@
 # Home page
 GET     /                           controllers.Application.index
 
-GET     /books                      controllers.Books.index
+##################### BOOKS ######################
+
+# Books list (look at the default values for pagination parameters)
+GET     /books                      controllers.Books.list(p:Int ?= 0, s:Int ?= 2)
+
+# Add Book
+GET     /books/new                  controllers.Books.create
+POST    /books                      controllers.Books.save
+
+# Edit existing Book
+GET     /books/:id                  controllers.Books.edit(id:Long)
+POST    /books/:id                  controllers.Books.update(id:Long)
+
+# Delete a book
+POST    /books/:id/delete           controllers.Books.delete(id:Long)
+
+##################### USERS ######################
 
 GET     /users                      controllers.Users.index
 

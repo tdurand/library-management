@@ -1,0 +1,30 @@
+@(id: Long, bookForm: Form[Book])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
+
+@main {
+    
+    <h1>Edit book</h1>
+    
+    @form(routes.Books.update(id)) {
+        
+        <fieldset>
+        
+            @inputText(bookForm("isbn"), 'label -> "ISBN")
+        
+        </fieldset>
+        
+        <div class="actions">
+            <input type="submit" value="Save this computer" class="btn primary"> or 
+            <a href="@routes.Books.list()" class="btn">Cancel</a> 
+        </div>
+        
+    }
+    
+    @form(routes.Books.delete(id), 'class -> "topRight") {
+        <input type="submit" value="Delete this book" class="btn danger">
+    }
+    
+}
