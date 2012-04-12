@@ -5,24 +5,26 @@
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
 
 @main {
+    @mainBooks {
+            <h1>Add a book</h1>
     
-    <h1>Add a book</h1>
-    
-    @form(routes.Books.save()) {
-        
-        <fieldset>
 
-            @inputText(bookForm("title"), 'label -> "Title")
-            @inputText(bookForm("isbn"), 'label -> "ISBN")
-            @inputText(bookForm("idLibrary"), 'label -> "idLibrary")
-            
-        </fieldset>
-        
-        <div class="actions">
-            <input type="submit" value="Create this book" class="btn primary"> or 
-            <a href="@routes.Books.list()" class="btn">Cancel</a> 
-        </div>
-        
+            @form(routes.Books.save(),'class -> "well form-horizontal") {
+                
+                <fieldset>
+
+                    @inputText(bookForm("title"), 'label -> "Title")
+                    @inputText(bookForm("isbn"), 'label -> "ISBN")
+                    @inputText(bookForm("idLibrary"), 'label -> "idLibrary")
+                    
+                </fieldset>
+                
+                <div class="actions">
+                    <input type="submit" value="Create this book" class="btn primary"> or 
+                    <a href="@routes.Books.list()" class="btn">Cancel</a> 
+                </div>
     }
-    
+
+
+    }
 }

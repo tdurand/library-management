@@ -20,76 +20,75 @@
 }
 
 @main {
-    
-    <h1>@Messages("book.list.title", currentPage.total)</h1>
+    @mainBooks {
 
-    @flash.get("success").map { message =>
-        <div class="alert-message warning">
-            <strong>Done!</strong> @message
-        </div>
-    }
+        <h1>@Messages("book.list.title", currentPage.total)</h1>
 
-    <div id="actions">
-        <a class="btn success" id="add" href="@routes.Books.create()">Add a new book</a>
-    </div>
-    
-    @Option(currentPage.items).filterNot(_.isEmpty).map { books =>
-        
-        <table class="computers zebra-striped">
-            <thead>
-                <tr>
-                    @header(2, "ISBN")
-                </tr>
-            </thead>
-            <tbody>
+            @flash.get("success").map { message =>
+                <div class="alert-message warning">
+                    <strong>Done!</strong> @message
+                </div>
+            }
 
-                @books.map { 
-                    case book => {
-                        <tr>
-                            <td><a href="@routes.Books.edit(book.id.get)">@book.isbn</a></td>
-                        </tr>
-                    }
-                        
-                }
-
-            </tbody>
-        </table>
-
-        <div id="pagination" class="pagination">
-            <ul>
-                @currentPage.prev.map { page =>
-                    <li class="prev">
-                        <a href="@link(page)">&larr; Previous</a>
-                    </li> 
-                }.getOrElse {
-                    <li class="prev disabled">
-                        <a>&larr; Previous</a>
-                    </li>
-                }
-                <li class="current">
-                    <a>Displaying @(currentPage.offset + 1) to @(currentPage.offset + books.size) of @currentPage.total</a>
-                </li>
-                @currentPage.next.map { page =>
-                    <li class="next">
-                        <a href="@link(page)">Next &rarr;</a>
-                    </li> 
-                }.getOrElse {
-                    <li class="next disabled">
-                        <a>Next &rarr;</a>
-                    </li>
-                }
-            </ul>
-        </div>
-        
-    }.getOrElse {
-        
-        <div class="well">
-            <em>Nothing to display</em>
-        </div>
-        
-    }
-
-        
-}
-
+            <div id="actions">
+                <a class="btn success" id="add" href="@routes.Books.create()">Add a new book</a>
+            </div>
             
+            @Option(currentPage.items).filterNot(_.isEmpty).map { books =>
+                
+                <table class="computers zebra-striped">
+                    <thead>
+                        <tr>
+                            @header(2, "ISBN")
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @books.map { 
+                            case book => {
+                                <tr>
+                                    <td><a href="@routes.Books.edit(book.id.get)">@book.isbn</a></td>
+                                </tr>
+                            }
+                                
+                        }
+
+                    </tbody>
+                </table>
+
+                <div id="pagination" class="pagination">
+                    <ul>
+                        @currentPage.prev.map { page =>
+                            <li class="prev">
+                                <a href="@link(page)">&larr; Previous</a>
+                            </li> 
+                        }.getOrElse {
+                            <li class="prev disabled">
+                                <a>&larr; Previous</a>
+                            </li>
+                        }
+                        <li class="current">
+                            <a>Displaying @(currentPage.offset + 1) to @(currentPage.offset + books.size) of @currentPage.total</a>
+                        </li>
+                        @currentPage.next.map { page =>
+                            <li class="next">
+                                <a href="@link(page)">Next &rarr;</a>
+                            </li> 
+                        }.getOrElse {
+                            <li class="next disabled">
+                                <a>Next &rarr;</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                
+            }.getOrElse {
+                
+                <div class="well">
+                    <em>Nothing to display</em>
+                </div>
+                
+            }
+
+    }
+}
