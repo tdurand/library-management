@@ -10,14 +10,10 @@
     
 
             @form(routes.Books.save(),'class -> "well form-horizontal") {
-                
-                <fieldset>
 
                     @inputText(bookForm("title"), 'label -> "Title")
                     @inputText(bookForm("isbn"), 'label -> "ISBN")
                     @inputText(bookForm("idLibrary"), 'label -> "idLibrary")
-                    
-                </fieldset>
                 
                 <div class="actions">
                     <input type="submit" value="Create this book" class="btn primary"> or 

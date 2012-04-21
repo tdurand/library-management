@@ -1,3 +1,60 @@
-body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+html {
+    background: #eee;
 }
+
+header h1 {
+    padding: 0.4em 1.1em;
+    color: white;
+    font-weight: normal;
+    font-size: 24px;
+}
+
+div.main {
+    position: relative;
+    padding: 5em 2em;
+    border-bottom: 1px solid #ccc;
+    min-height: 600px;
+} 
+
+div.main .topRight {
+    position: absolute;
+    right: 20px;
+    top: 70px;
+}
+
+table.listitems em {
+    color: #aaa;
+}
+
+table.listitems .col3, table.computers .col4 {
+    width: 10%;
+    min-width: 100px;
+}
+
+table.listitems .col5 {
+    width: 30%;
+    min-width: 300px;
+}
+
+table.listitems .header a {
+}
+
+#actions {
+    text-align:right;
+    margin-bottom:10px;
+}
+
+#pagination {
+    position: relative;
+}
+
+#pagination ul {
+    position: absolute;
+    right: 0;
+}
+
+#pagination ul .current a {
+    color: #666;
+}
+
+
