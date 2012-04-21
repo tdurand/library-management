@@ -31,7 +31,7 @@
             }
 
             <div id="actions">
-                <a class="btn success" id="add" href="@routes.Books.create()">Add a new book</a>
+                <a class="btn btn-success" id="add" href="@routes.Books.create()">Add a new book</a>
             </div>
             
             @Option(currentPage.items).filterNot(_.isEmpty).map { books =>
@@ -51,7 +51,7 @@
                                 <tr>
                                     <td>@book.isbn</td>
                                     <td>@book.title</td>
-                                    <td><a href="@routes.Books.edit(book.id.get)">Edit</a> Remove Tag</td>
+                                    <td><a href="@routes.Books.edit(book.id.get)">Edit</a></td>
                                 </tr>
                             }
                                 

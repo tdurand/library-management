@@ -9,24 +9,22 @@
     
     <h1>Edit book</h1>
     
-    @form(routes.Books.update(id)) {
-        
-        <fieldset>
-        
-            @inputText(bookForm("isbn"), 'label -> "ISBN")
-            @inputText(bookForm("title"), 'label -> "Title")
-        
-        </fieldset>
-        
-        <div class="actions">
-            <input type="submit" value="Save this computer" class="btn primary"> or 
-            <a href="@routes.Books.list()" class="btn">Cancel</a> 
-        </div>
-        
-    }
+        @form(routes.Books.update(id),'class -> "form-horizontal") {
+            
+            <legend>Book informations</legend>
+            
+                @inputText(bookForm("isbn"), '_label -> "ISBN")
+                @inputText(bookForm("title"), '_label -> "Title")
+            
+            <div class="form-actions">
+                <a href="@routes.Books.list()" class="btn">Cancel</a> 
+                <input type="submit" value="Save this book" class="btn btn-primary">
+            </div>
+            
+        }
     
-    @form(routes.Books.delete(id), 'class -> "topRight") {
-        <input type="submit" value="Delete this book" class="btn danger">
-    }
+        @form(routes.Books.delete(id), 'class -> "topRight") {
+            <input type="submit" value="Delete this book" class="btn btn-danger">
+        }
     }
 }

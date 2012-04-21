@@ -21,7 +21,6 @@ object Books extends Controller {
   val bookForm = Form(
     mapping(
       "id" -> ignored(NotAssigned:Pk[Long]),
-      "idLibrary" -> longNumber,
       "title" -> nonEmptyText,
       "isbn" -> nonEmptyText
     )(Book.apply)(Book.unapply)
@@ -84,7 +83,7 @@ object Books extends Controller {
       formWithErrors => BadRequest(html.books.createForm(formWithErrors)),
       book => {
         Book.insert(book)
-        Home.flashing("success" -> "Book %s has been created".format(book.isbn))
+        Home.flashing("success" -> "Book %s : %s has been created".format(book.isbn,book.title))
       }
     )
   }

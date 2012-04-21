@@ -7,17 +7,17 @@
 @main {
     @mainBooks {
             <h1>Add a book</h1>
-    
 
-            @form(routes.Books.save(),'class -> "well form-horizontal") {
+            @form(routes.Books.save(),'class -> "form-horizontal") {
 
-                    @inputText(bookForm("title"), 'label -> "Title")
-                    @inputText(bookForm("isbn"), 'label -> "ISBN")
-                    @inputText(bookForm("idLibrary"), 'label -> "idLibrary")
+            <legend>Book informations</legend>
+
+                    @inputText(bookForm("title"), '_label -> "Title")
+                    @inputText(bookForm("isbn"), '_label -> "ISBN")
                 
-                <div class="actions">
-                    <input type="submit" value="Create this book" class="btn primary"> or 
-                    <a href="@routes.Books.list()" class="btn">Cancel</a> 
+                <div class="form-actions">
+                    <a href="@routes.Books.list()" class="btn">Cancel</a>
+                    <input type="submit" value="Create this book" class="btn btn-primary">  
                 </div>
     }
 

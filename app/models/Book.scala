@@ -6,7 +6,7 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class Book(id : Pk[Long]= NotAssigned,idLibrary:Long,title: String,isbn : String)
+case class Book(id : Pk[Long]= NotAssigned,title: String,isbn : String)
 
 /**
  * Helper for pagination.
@@ -25,10 +25,9 @@ object Book {
    */
   val simple = {
     get[Pk[Long]]("book.id") ~
-    get[Long]("book.idLibrary") ~
     get[String]("book.title") ~
     get[String]("book.isbn")  map {
-      case id~idLibrary~title~isbn => Book(id,idLibrary,title,isbn)
+      case id~title~isbn => Book(id,title,isbn)
     }
   }
   
@@ -51,13 +50,12 @@ object Book {
       SQL(
         """
           update book
-          set title = {title}, idLibrary = {idLibrary}, isbn = {isbn}
+          set title = {title}, idLibrary = 1, isbn = {isbn}
           where id = {id}
         """
       ).on(
         'id -> id,
         'title -> book.title,
-        'idLibrary -> book.idLibrary,
         'isbn -> book.isbn
       ).executeUpdate()
     }
@@ -71,11 +69,10 @@ object Book {
       SQL(
         """
           insert into book values (nextval('book_seq'), 
-            {idLibrary},{title},{isbn}
+            1,{title},{isbn}
           )
         """
       ).on(
-        'idLibrary -> book.idLibrary,
         'title -> book.title,
         'isbn -> book.isbn
       ).executeUpdate()
