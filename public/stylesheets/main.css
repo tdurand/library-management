@@ -26,12 +26,12 @@ table.listitems em {
     color: #aaa;
 }
 
-table.listitems .col3, table.computers .col4 {
+table.listitems .col4 {
     width: 10%;
     min-width: 100px;
 }
 
-table.listitems .col5 {
+table.listitems .col3 {
     width: 30%;
     min-width: 300px;
 }

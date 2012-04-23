@@ -1,0 +1,14 @@
+@(content:Html)
+
+<div class="row">
+        <div class="span2">
+            <ul class="nav nav-list well">
+                  <li class="nav-header">Users</li>
+                  <li class="active"><a href="@routes.Users.list()">List users</a></li>
+                  <li><a href="@routes.Users.create()">Add user</a></li>
+            </ul>
+        </div>
+        <div class="span10">
+            @content
+        </div>
+</div>

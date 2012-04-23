@@ -29,6 +29,7 @@ CREATE TABLE `User` (
   `id` INTEGER NOT NULL,
   `idLibrary` INTEGER NOT NULL,
   `firstName` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
 );
 

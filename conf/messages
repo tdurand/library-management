@@ -1,3 +1,9 @@
 # Messages
 
+#Book
+
 book.list.title={0,choice,0#No books|1#One book|1<{0,number,integer} books} found
+
+#Users
+
+user.list.title=List users

@@ -23,7 +23,21 @@ POST    /books/:id/delete           controllers.Books.delete(id:Long)
 
 ##################### USERS ######################
 
-GET     /users                      controllers.Users.index
+# Users list (look at the default values for pagination parameters)
+GET     /users                      controllers.Users.list(p:Int ?= 0, s:Int ?= 2)
+
+# Add User
+GET     /users/new                  controllers.Users.create
+POST    /users                      controllers.Users.save
+
+# Edit existing User
+GET     /users/:id                  controllers.Users.edit(id:Long)
+POST    /users/:id                  controllers.Users.update(id:Long)
+
+# Delete a user
+POST    /users/:id/delete           controllers.Users.delete(id:Long)
+
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
