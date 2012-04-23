@@ -6,7 +6,7 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class User(id : Pk[Long]= NotAssigned,firstName:String,password:String)
+case class User(id : Pk[Long]= NotAssigned,login:String,password:String)
 
 object User {
   
@@ -17,13 +17,30 @@ object User {
    */
   val simple = {
     get[Pk[Long]]("user.id") ~
-    get[String]("user.firstName") ~
+    get[String]("user.login") ~
     get[String]("user.password")  map {
-      case id~firstName~password => User(id,firstName,password)
+      case id~login~password => User(id,login,password)
     }
   }
   
   // -- Queries
+  
+  /**
+   * Authenticate a User.
+   */
+  def authenticate(login: String, password: String): Option[User] = {
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+         select * from user where 
+         login = {login} and password = {password}
+        """
+      ).on(
+        'login -> login,
+        'password -> password
+      ).as(User.simple.singleOpt)
+    }
+  }
   
   /**
    * Retrieve a user from the id.
@@ -42,12 +59,12 @@ object User {
       SQL(
         """
           update user
-          set firstName = {firstName}, idLibrary = 1, password = {password}
+          set login = {login}, idLibrary = 1, password = {password}
           where id = {id}
         """
       ).on(
         'id -> id,
-        'firstName -> user.firstName,
+        'login -> user.login,
         'password -> user.password
       ).executeUpdate()
     }
@@ -61,11 +78,11 @@ object User {
       SQL(
         """
           insert into user values (nextval('user_seq'), 
-            1,{firstName},{password}
+            1,{login},{password}
           )
         """
       ).on(
-        'firstName -> user.firstName,
+        'login -> user.login,
         'password -> user.password
       ).executeUpdate()
     }

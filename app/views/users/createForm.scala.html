@@ -4,7 +4,7 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
 
-@main {
+@main("") {
     @mainUsers {
             <h1>Add an user</h1>
 
@@ -12,7 +12,7 @@
 
             <legend>User informations</legend>
 
-                    @inputText(userForm("firstName"), '_label -> "Name")
+                    @inputText(userForm("login"), '_label -> "Name")
                     @inputPassword(userForm("password"), '_label -> "Password")
                 
                 <div class="form-actions">

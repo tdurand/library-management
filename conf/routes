@@ -5,6 +5,12 @@
 # Home page
 GET     /                           controllers.Application.index
 
+##################### LOGIN ######################
+
+GET     /login                              controllers.Application.login
+POST    /login                              controllers.Application.authenticate
+GET     /logout                             controllers.Application.logout
+
 ##################### BOOKS ######################
 
 # Books list (look at the default values for pagination parameters)

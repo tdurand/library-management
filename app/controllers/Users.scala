@@ -8,7 +8,7 @@ import anorm._
 import views._
 import models.User
 
-object Users extends Controller {
+object Users extends Controller with Secured {
   
   /**
    * This result directly redirect to the users home.
@@ -21,7 +21,7 @@ object Users extends Controller {
   val userForm = Form(
     mapping(
       "id" -> ignored(NotAssigned:Pk[Long]),
-      "firstName" -> nonEmptyText,
+      "login" -> nonEmptyText,
       "password" -> nonEmptyText
     )(User.apply)(User.unapply)
   )
@@ -63,7 +63,7 @@ object Users extends Controller {
       formWithErrors => BadRequest(html.users.editForm(id, formWithErrors)),
       user => {
         User.update(id, user)
-        Home.flashing("success" -> "User %s has been updated".format(user.firstName))
+        Home.flashing("success" -> "User %s has been updated".format(user.login))
       }
     )
   }
@@ -83,7 +83,7 @@ object Users extends Controller {
       formWithErrors => BadRequest(html.users.createForm(formWithErrors)),
       user => {
         User.insert(user)
-        Home.flashing("success" -> "User %s has been created".format(user.firstName))
+        Home.flashing("success" -> "User %s has been created".format(user.login))
       }
     )
   }

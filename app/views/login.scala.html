@@ -1,0 +1,54 @@
+@(loginForm: Form[(String,String)])(implicit flash: Flash)
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Management</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")"> 
+    <style>
+    body {
+        background-color: white;
+    }
+    div.login {
+        width:50%;
+        margin:auto;
+        margin-top:10%;
+    }
+    div.submitlogin {
+        text-align:center;
+    }
+
+        
+    </style>
+</head>
+<body>
+    <div class="login">
+                @helper.form(routes.Application.authenticate,'class -> "well form-horizontal") {
+
+                <h1>Log in</h1>
+                
+                @flash.get("success").map { message =>
+                    <div class="alert alert-success">
+                        <strong>Success :</strong>@message
+                    </div>
+                }
+
+                @loginForm.globalError.map { error =>
+                <div class="alert alert-error">
+                    <strong>Error :</strong> @error.message
+                </div>
+                }
+            
+                    @inputText(loginForm("login"), '_label -> "Login")
+                    @inputPassword(loginForm("password"), '_label -> "Password")
+                <div class="submitlogin">
+                    <input type="submit" value="Login" class="login btn-large btn-primary">  
+                </div>
+                }
+    </div>
+</body>
+</html>

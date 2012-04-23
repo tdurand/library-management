@@ -1,4 +1,4 @@
-@(content: Html)
+@(user: String)(content: Html)
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,6 +16,9 @@
               <li><a href="@routes.Application.index()">Home</a></li>
               <li><a href="@routes.Books.list()">Books</a></li>
               <li><a href="@routes.Users.list()">Users</a></li>
+            </ul>
+            <ul class="nav pull-right">
+                <li class=""><a href="@routes.Application.logout()">Logout (@user)</a></li>
             </ul>
         </div>
       </div>

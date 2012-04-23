@@ -28,7 +28,7 @@ CREATE TABLE `Loan` (
 CREATE TABLE `User` (
   `id` INTEGER NOT NULL,
   `idLibrary` INTEGER NOT NULL,
-  `firstName` VARCHAR(255) NOT NULL,
+  `login` VARCHAR(255) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -58,6 +58,19 @@ CREATE SEQUENCE library_seq start with 1;
 
 INSERT INTO `Library` VALUES (nextval('library_seq'),'Default');
 
+-- ---
+-- Test Data
+-- ---
+
+-- INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES
+-- ('','','','');
+-- INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES
+-- ('','');
+-- INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES
+-- ('','','','','','');
+INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
+-- INSERT INTO `Library` (`id`,`name`) VALUES
+
 # --- !Downs
 
 DROP TABLE IF EXISTS `Book`;
@@ -71,4 +84,6 @@ DROP SEQUENCE IF EXISTS physicalbook_seq;
 DROP SEQUENCE IF EXISTS loan_seq;
 DROP SEQUENCE IF EXISTS user_seq;
 DROP SEQUENCE IF EXISTS library_seq;
+
+
 

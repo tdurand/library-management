@@ -19,7 +19,7 @@
     </th>
 }
 
-@main {
+@main("") {
     @mainUsers {
 
         <h1>@Messages("user.list.title")</h1>
@@ -48,7 +48,7 @@
                         @users.map { 
                             case user => {
                                 <tr>
-                                    <td>@user.firstName</td>
+                                    <td>@user.login</td>
                                     <td><a href="@routes.Users.edit(user.id.get)">Edit</a></td>
                                 </tr>
                             }
