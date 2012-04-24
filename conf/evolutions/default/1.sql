@@ -62,14 +62,15 @@ INSERT INTO `Library` VALUES (nextval('library_seq'),'Default');
 -- Test Data
 -- ---
 
--- INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES
--- ('','','','');
--- INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES
--- ('','');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Millénium 1','2929ANDJS');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Millénium 2','928AJZNSN');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Millénium 3','2882ANSBN');
+
+INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES (nextval('physicalbook_seq'),'1');
+INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES (nextval('physicalbook_seq'),'1');
 -- INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES
 -- ('','','','','','');
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
--- INSERT INTO `Library` (`id`,`name`) VALUES
 
 # --- !Downs
 

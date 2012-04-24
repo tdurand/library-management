@@ -27,6 +27,10 @@ POST    /books/:id                  controllers.Books.update(id:Long)
 # Delete a book
 POST    /books/:id/delete           controllers.Books.delete(id:Long)
 
+##################### PHYSICAL BOOKS ######################
+# PhysicalBooks list (look at the default values for pagination parameters)
+GET     /copies                      controllers.PhysicalBooks.list(p:Int ?= 0, s:Int ?= 2, f ?= "")
+
 ##################### USERS ######################
 
 # Users list (look at the default values for pagination parameters)
