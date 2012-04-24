@@ -41,6 +41,7 @@
                         <tr>
                             @header(4, "Isbn")
                             @header(3, "Title")
+                            <th>Copies</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -51,7 +52,11 @@
                                 <tr>
                                     <td>@book.isbn</td>
                                     <td>@book.title</td>
-                                    <td><a href="@routes.Books.edit(book.id.get)">Edit</a></td>
+                                    <td>?</td>
+                                    <td>
+                                    <a href="@routes.Books.edit(book.id.get)">Edit</a> -
+                                    <a href="">Add a copy</a>
+                                    </td>
                                 </tr>
                             }
                                 

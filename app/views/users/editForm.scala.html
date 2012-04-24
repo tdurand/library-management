@@ -14,7 +14,7 @@
             <legend>User informations</legend>
             
                 @inputText(userForm("login"), '_label -> "Name")
-                @inputText(userForm("password"), '_label -> "Password")
+                @inputPassword(userForm("password"), '_label -> "Password")
             
             <div class="form-actions">
                 <a href="@routes.Users.list()" class="btn">Cancel</a> 

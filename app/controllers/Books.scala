@@ -22,8 +22,11 @@ object Books extends Controller {
     mapping(
       "id" -> ignored(NotAssigned:Pk[Long]),
       "title" -> nonEmptyText,
-      "isbn" -> nonEmptyText
-    )(Book.apply)(Book.unapply)
+      "isbn" -> nonEmptyText,
+      "copies" -> optional(number)
+    )
+    ((id, title, isbn, _) => Book(id,title,isbn))
+    ((book: Book) => Some(book.id, book.title, book.isbn,Option(0)))
   )
   
   def index = Action { Home }

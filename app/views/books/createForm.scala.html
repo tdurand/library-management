@@ -14,13 +14,18 @@
 
                     @inputText(bookForm("title"), '_label -> "Title")
                     @inputText(bookForm("isbn"), '_label -> "ISBN")
-                
+
+            <legend>Copies</legend>
+
+                    @helper.input(bookForm("copies"), '_label -> "How many copies ?") { (id, name, value, args) =>
+                        <input type="number" name="@name" id="@id" value="@value" @toHtmlArgs(args)>
+                    } 
+                    
                 <div class="form-actions">
                     <a href="@routes.Books.list()" class="btn">Cancel</a>
                     <input type="submit" value="Create this book" class="btn btn-primary">  
                 </div>
-
-    }
+        }
 
     }
 }
