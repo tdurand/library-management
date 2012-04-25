@@ -1,4 +1,4 @@
-@(currentPage: Page[Book], currentOrderBy: Int)(implicit flash: play.api.mvc.Flash)
+@(currentPage: Page[(Book, Option[Long])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
 
 @****************************************
 * Helper generating navigation links    *
@@ -31,6 +31,10 @@
             }
 
             <div id="actions">
+                @helper.form(action=routes.Books.list(),'class -> "form-horizontal") {
+                    <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by book title...">
+                    <input type="submit" id="searchsubmit" value="Filter by title" class="btn btn-primary">
+                }
                 <a class="btn btn-success" id="add" href="@routes.Books.create()">Add a new book</a>
             </div>
             
@@ -48,11 +52,11 @@
                     <tbody>
 
                         @books.map { 
-                            case book => {
+                            case (book,nbCopies) => {
                                 <tr>
                                     <td>@book.isbn</td>
                                     <td>@book.title</td>
-                                    <td>?</td>
+                                    <td>@nbCopies.getOrElse { <em>-</em> }</td>
                                     <td>
                                     <a href="@routes.Books.edit(book.id.get)">Edit</a> -
                                     <a href="">Add a copy</a>

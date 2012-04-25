@@ -30,6 +30,13 @@ object Book {
       case id~title~isbn => Book(id,title,isbn)
     }
   }
+
+  /**
+   * Parse a (Book,nbCopies) from a ResultSet
+   */
+  val withNbCopies = Book.simple ~ get[Option[Long]]("nbCopies") map {
+    case book~nbCopies => (book,nbCopies)
+  }
   
   // -- Queries
   
@@ -87,15 +94,16 @@ object Book {
       SQL("delete from book where id = {id}").on('id -> id).executeUpdate()
     }
   }
-  
-  /**
-   * Return a page of Book.
+
+    /**
+   * Return a page of (Book,nbCopies).
    *
    * @param page Page to display
-   * @param pageSize Number of books per page
+   * @param pageSize Number of Book per page
    * @param orderBy Book property used for sorting
+   * @param filter Filter applied on the name column
    */
-  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1): Page[Book] = {
+  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(Book, Option[Long])] = {
     
     val offest = pageSize * page
     
@@ -103,25 +111,31 @@ object Book {
       
       val books = SQL(
         """
-          select * from book 
+          select book.id,book.title,book.isbn,COUNT(physicalbook.id) AS nbCopies from book 
+          left join physicalbook on book.id = physicalbook.idBook
+          where book.title like {filter}
+          group by book.id
           order by {orderBy} nulls last
           limit {pageSize} offset {offset}
         """
       ).on(
         'pageSize -> pageSize, 
         'offset -> offest,
+        'filter -> filter,
         'orderBy -> orderBy
-      ).as(Book.simple *)
+      ).as(Book.withNbCopies *)
 
       val totalRows = SQL(
         """
           select count(*) from book 
+          where book.title like {filter}
         """
+      ).on(
+        'filter -> filter
       ).as(scalar[Long].single)
 
       Page(books, page, offest, totalRows)
       
     }
-    
-  }
+    }
 }

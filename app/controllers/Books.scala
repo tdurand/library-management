@@ -38,10 +38,10 @@ object Books extends Controller {
    * @param page Current page number (starts from 0)
    * @param orderBy Column to be sorted
    */
-  def list(page: Int, orderBy: Int) = Action { implicit request =>
+  def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
     Ok(html.books.list(
-      Book.list(page = page, orderBy = orderBy),
-      orderBy
+      Book.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
+      orderBy, filter
     ))
   }
   

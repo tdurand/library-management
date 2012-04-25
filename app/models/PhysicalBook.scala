@@ -4,7 +4,7 @@ import play.api.db._
 import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
-import models.Book
+import models._
 
 case class PhysicalBook(id : Pk[Long]= NotAssigned,idBook:Long)
 
@@ -41,11 +41,11 @@ object PhysicalBook {
   }
   
   /**
-   * Return a page of (Computer,Company).
+   * Return a page of (PhysicalBook,Book).
    *
    * @param page Page to display
-   * @param pageSize Number of computers per page
-   * @param orderBy Computer property used for sorting
+   * @param pageSize Number of physicalbook per page
+   * @param orderBy Book property used for sorting
    * @param filter Filter applied on the name column
    */
   def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(PhysicalBook, Option[Book])] = {

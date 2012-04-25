@@ -14,7 +14,7 @@ GET     /logout                             controllers.Application.logout
 ##################### BOOKS ######################
 
 # Books list (look at the default values for pagination parameters)
-GET     /books                      controllers.Books.list(p:Int ?= 0, s:Int ?= 2)
+GET     /books                      controllers.Books.list(p:Int ?= 0, s:Int ?= 2, f ?= "")
 
 # Add Book
 GET     /books/new                  controllers.Books.create
