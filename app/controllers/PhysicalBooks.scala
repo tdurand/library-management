@@ -2,11 +2,11 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import models.PhysicalBook
 import play.api.data._
 import play.api.data.Forms._
 import anorm._
 import views._
+import models._
 
 object PhysicalBooks extends Controller {
   
@@ -47,6 +47,29 @@ object PhysicalBooks extends Controller {
   def delete(id: Long) = Action {
     PhysicalBook.delete(id)
     Home.flashing("success" -> "PhysicalBook has been deleted")
+  }
+
+  /**
+   * Display the 'add copy form'.
+   */
+  def create(idBook:Long) = Action {
+    Book.findById(idBook).map { book =>
+      Ok(html.physicalbooks.createForm(physicalbookForm.fill(PhysicalBook(NotAssigned,idBook)),book))
+    }.getOrElse(NotFound)
+  }
+  
+  /**
+   * Handle the 'add copy form' submission.
+   */
+  def save = Action { implicit request =>
+    
+    physicalbookForm.bindFromRequest.fold(
+      formWithErrors => BadRequest(html.physicalbooks.createForm(formWithErrors,Book.findById(physicalbookForm.data.get("idBook").get.toLong).get)),
+      physicalbooks => {
+        PhysicalBook.insert(physicalbooks)
+        Home.flashing("success" -> "Copy %s has been created".format(physicalbooks.idBook))
+      }
+    )
   }
   
 }

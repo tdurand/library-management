@@ -25,9 +25,9 @@
     <h1>@Messages("physicalbook.list.title")</h1>
 
     @flash.get("success").map { message =>
-        <div class="alert-message warning">
-            <strong>Done!</strong> @message
-        </div>
+                <div class="alert alert-success">
+                    <strong>Done!</strong> @message
+                </div>
     }
 
     <div id="actions">
@@ -44,7 +44,7 @@
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    @header(1, "Copy")
+                    @header(1, "Copy id")
                     <th>Isbn</th>
                     @header(2, "Book")
                 </tr>

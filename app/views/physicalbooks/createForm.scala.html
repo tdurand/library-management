@@ -1,0 +1,30 @@
+@(copyForm: Form[PhysicalBook],book:Book)
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
+
+@main("") {
+    @mainBooks {
+            <h1>Add a copy</h1>
+
+            @form(routes.PhysicalBooks.save(),'class -> "form-horizontal") {
+
+            <legend>Copy informations</legend>
+
+            <p>Book:</p>
+            <ul>
+                <li>ISBN : @book.isbn</li>
+                <li>Title: @book.title</li>
+            </ul>
+
+            <input type="hidden" name='@copyForm("idBook").name' id='@copyForm("idBook").id' value='@copyForm("idBook").value' />
+                    
+                <div class="form-actions">
+                    <a href="@routes.PhysicalBooks.list()" class="btn">Cancel</a>
+                    <input type="submit" value="Add a copy of this book" class="btn btn-primary">  
+                </div>
+        }
+
+    }
+}
