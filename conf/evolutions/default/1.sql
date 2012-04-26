@@ -68,9 +68,12 @@ INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq')
 
 INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES (nextval('physicalbook_seq'),'1');
 INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES (nextval('physicalbook_seq'),'1');
--- INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES
--- ('','','','','','');
+
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
+INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','jpedro','test');
+
+INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','1',1335384984,1335392184,23233);
+INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','2',2993912,1335392184,23233);
 
 # --- !Downs
 

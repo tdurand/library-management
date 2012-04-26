@@ -48,8 +48,10 @@
                         @users.map { 
                             case user => {
                                 <tr>
-                                    <td>@user.login</td>
-                                    <td><a href="@routes.Users.edit(user.id.get)">Edit</a></td>
+                                    <td><a href="@routes.Users.details(user.id.get)">@user.login</a></td>
+                                    <td><a href="@routes.Users.edit(user.id.get)">Edit</a> - 
+                                        <a href="@routes.Users.details(user.id.get)">Details</a>
+                                    </td>
                                 </tr>
                             }
                                 

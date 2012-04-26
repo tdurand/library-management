@@ -6,6 +6,8 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
+import models._
+
 case class User(id : Pk[Long]= NotAssigned,login:String,password:String)
 
 object User {
@@ -22,6 +24,11 @@ object User {
       case id~login~password => User(id,login,password)
     }
   }
+
+  /**
+   * Parse a List[(User,Loan)] from a ResultSet
+  */ 
+  val withLoans = User.simple ~ (Loan.simple ?) map(flatten)
   
   // -- Queries
   
@@ -130,7 +137,24 @@ object User {
 
       Page(users, page, offest, totalRows)
       
+        }
     }
+
     
-  }
+    def details(idUser:Long):(User,List[Option[Loan]]) = {
+      DB.withConnection { implicit connection =>
+      
+          val userwithLoans:List[(User,Option[Loan])]= SQL(
+            """
+                select * from user 
+                left join loan on user.id = loan.idUser
+                where user.id = {idUser}
+            """
+          ).on(
+            'idUser -> idUser
+          ).as(User.withLoans *)
+
+          return (userwithLoans.head._1,userwithLoans.map(_._2))
+      }
+    } 
 }

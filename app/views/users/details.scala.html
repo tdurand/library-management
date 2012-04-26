@@ -1,0 +1,30 @@
+@(user : User,loans: List[Option[Loan]])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
+
+@main("") {
+    @mainUsers {
+    
+    <h1>@user.login details</h1>
+            
+    <ul>
+        @loans.map {
+            case loan => {
+                <li>@loan.get.id
+                    <ul>
+                    <li>@loan.get.idUser</li>
+                    <li>@loan.get.idPhysicalBook</li>
+                    <li>@loan.get.dateBorrowed</li>
+                    <li>@loan.get.dateDue</li>
+                    <li>@loan.get.dateReturned</li>
+                    </ul>
+                </li>
+                
+            }
+        }
+    </ul>
+}
+}
+

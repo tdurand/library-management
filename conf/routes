@@ -39,6 +39,9 @@ POST    /copies                    controllers.PhysicalBooks.save
 # Users list (look at the default values for pagination parameters)
 GET     /users                      controllers.Users.list(p:Int ?= 0, s:Int ?= 2)
 
+# Users details 
+GET     /users/:id                  controllers.Users.details(id:Long)
+
 # Add User
 GET     /users/new                  controllers.Users.create
 POST    /users                      controllers.Users.save

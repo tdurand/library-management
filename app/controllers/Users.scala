@@ -43,17 +43,6 @@ object Users extends Controller with Secured {
   }
   
   /**
-   * Display the 'edit form' of a existing User.
-   *
-   * @param id Id of the computer to edit
-   */
-  def edit(id: Long) = Action {
-    User.findById(id).map { user =>
-      Ok(html.users.editForm(id, userForm.fill(user)))
-    }.getOrElse(NotFound)
-  }
-  
-  /**
    * Handle the 'edit form' submission 
    *
    * @param id Id of the user to edit
@@ -94,6 +83,27 @@ object Users extends Controller with Secured {
   def delete(id: Long) = Action {
     User.delete(id)
     Home.flashing("success" -> "User has been deleted")
+  }
+
+  /**
+   * Display the 'edit form' of a existing User.
+   *
+   * @param id Id of the user to edit
+   */
+  def edit(id: Long) = Action {
+    User.findById(id).map { user =>
+      Ok(html.users.editForm(id, userForm.fill(user)))
+    }.getOrElse(NotFound)
+  }
+
+  /**
+   * Display the users details of a existing User.
+   *
+   * @param id Id of the computer to edit
+   */
+  def details(id: Long) = Action {
+    val details=User.details(id)
+    Ok(html.users.details(details._1,details._2))
   }
   
 }
