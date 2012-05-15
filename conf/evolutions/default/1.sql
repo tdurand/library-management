@@ -19,9 +19,9 @@ CREATE TABLE `Loan` (
   `id` INTEGER NOT NULL,
   `idUser` INTEGER NOT NULL,
   `idPhysicalBook` INTEGER NOT NULL,
-  `dateBorrowed` INTEGER NOT NULL,
-  `dateDue` INTEGER NOT NULL,
-  `dateReturned` INTEGER NOT NULL,
+  `dateBorrowed` timestamp NOT NULL,
+  `dateDue` timestamp NOT NULL,
+  `dateReturned` timestamp,
   PRIMARY KEY (`id`)
 );
         
@@ -72,8 +72,8 @@ INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES (nextval('physicalbook_seq'),'
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','jpedro','test');
 
-INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','1',1335384984,1335392184,23233);
-INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','2',2993912,1335392184,23233);
+INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','1','2001-02-16 20:14:12','2001-02-16 20:14:12',NULL);
+INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','2','2001-02-16 20:14:12','2001-02-16 20:14:12',NULL);
 
 # --- !Downs
 

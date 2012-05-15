@@ -16,9 +16,10 @@
                     <ul>
                     <li>@loan.get.idUser</li>
                     <li>@loan.get.idPhysicalBook</li>
-                    <li>@loan.get.dateBorrowed</li>
-                    <li>@loan.get.dateDue</li>
-                    <li>@loan.get.dateReturned</li>
+                    <li>@loan.get.dateBorrowed.format("MMM dd yyyy")</li>
+                    <li>@loan.get.dateDue.format("MMM dd yyyy")</li>
+                    <li>@loan.get.dateReturned.exists(_.format("dd MMM yyyy"))
+                    </li>
                     </ul>
                 </li>
                 
