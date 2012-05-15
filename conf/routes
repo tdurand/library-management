@@ -53,6 +53,19 @@ POST    /users/:id                  controllers.Users.update(id:Long)
 # Delete a user
 POST    /users/:id/delete           controllers.Users.delete(id:Long)
 
+##################### LOANS ######################
+
+# Loan index
+GET     /loans                      controllers.Loans.index
+
+# New Loan
+GET     /loans/new                  controllers.Loans.newLoan
+
+# Save Loan
+POST    /loans                      controllers.Loans.save
+
+# Return Book
+GET     /loans/return               controllers.Loans.returnLoan
 
 
 # Map static resources from the /public folder to the /assets URL path

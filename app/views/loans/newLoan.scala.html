@@ -1,0 +1,23 @@
+
+@import helper._
+
+@main("") {
+
+    @mainLoans {
+
+    <h1>New loan</h1>
+    @form(routes.Loans.save(),'class -> "form-horizontal") {
+
+            <legend>Loan owner</legend>
+
+            <legend>Book loaned</legend>
+
+            <legend>Loan data</legend>
+                    
+                <div class="form-actions">
+                    <a href="@routes.Loans.index()" class="btn">Cancel</a>
+                    <input type="submit" value="Create this loan" class="btn btn-primary">  
+    }
+
+    }
+}

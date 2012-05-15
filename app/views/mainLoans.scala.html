@@ -1,0 +1,14 @@
+@(content:Html)
+
+<div class="row">
+        <div class="span2">
+            <ul class="nav nav-list well">
+                  <li class="nav-header"></li>
+                  <li><a href="@routes.Loans.newLoan()">Make a new loan</a></li>
+                  <li><a href="@routes.Loans.returnLoan()">Return a loan</a></li>
+            </ul>
+        </div>
+        <div class="span10">
+            @content
+        </div>
+</div>
