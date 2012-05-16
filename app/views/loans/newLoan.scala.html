@@ -1,3 +1,4 @@
+@(owner:Option[User],book:Option[(PhysicalBook,Option[Book])],contextLoan: ContextLoan)
 
 @import helper._
 
@@ -8,15 +9,59 @@
     <h1>New loan</h1>
     @form(routes.Loans.save(),'class -> "form-horizontal") {
 
-            <legend>Loan owner</legend>
+            <legend>Owner of the loan</legend>
+
+              @owner match {
+              case None => {
+                <ul>
+                <li><a href="@routes.Loans.selectUser(contextLoan.ownerId,contextLoan.bookId)">Select an user</a></li>
+                <li>Use RFID Card</li>
+                </ul>
+              }
+              case Some(_) => {
+                <p>@owner.get.login (<a href="@routes.Loans.selectUser(contextLoan.ownerId,contextLoan.bookId)">Edit</a>)</p>
+              }
+
+              }
+            
 
             <legend>Book loaned</legend>
 
-            <legend>Loan data</legend>
+            @book match {
+              case None => {
+                <ul>
+                <li><a href="@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId)">Find a book</a></li>
+                <li>Use RFID Reader</li>
+                </ul>
+              }
+              case Some(_) => {
+                <p>@book.map { 
+                    case (physicalbook, book) => {
+                        <ul>
+                            <li>@physicalbook.id</li>
+                            <li>@book.map(_.isbn).getOrElse { <em>-</em> }</li>
+                            <li>@book.map(_.title).getOrElse { <em>-</em> } </li>
+                        </ul>
+                    }
+                } 
+                </p>
+                <p>(<a href="@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId)">Edit</a>)</p>
+              }
+
+            }
+            
+
+            <legend>Loan information</legend>
+
+            <ul>
+                <li>Date loaned : </li>
+                <li>Due date: </li>
+            </ul>
+
                     
                 <div class="form-actions">
                     <a href="@routes.Loans.index()" class="btn">Cancel</a>
-                    <input type="submit" value="Create this loan" class="btn btn-primary">  
+                    <input type="submit" value="Validate this loan" class="btn btn-primary">  
     }
 
     }

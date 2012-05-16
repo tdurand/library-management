@@ -39,6 +39,12 @@ object PhysicalBook {
       SQL("select * from physicalbook where id = {id}").on('id -> id).as(PhysicalBook.simple.singleOpt)
     }
   }
+
+  def findByIdWithBook(id:Long):Option[(PhysicalBook, Option[Book])] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from physicalbook left join book on physicalbook.idBook = book.id where physicalbook.id = {id}").on('id -> id).as(PhysicalBook.withBook.singleOpt)
+    }
+  }
   
   /**
    * Return a page of (PhysicalBook,Book).

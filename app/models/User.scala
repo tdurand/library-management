@@ -111,7 +111,7 @@ object User {
    * @param pageSize Number of users per page
    * @param orderBy user property used for sorting
    */
-  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1): Page[User] = {
+  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[User] = {
     
     val offest = pageSize * page
     
@@ -120,12 +120,14 @@ object User {
       val users = SQL(
         """
           select * from user 
+          where user.login like {filter}
           order by {orderBy} nulls last
           limit {pageSize} offset {offset}
         """
       ).on(
         'pageSize -> pageSize, 
         'offset -> offest,
+        'filter -> filter,
         'orderBy -> orderBy
       ).as(User.simple *)
 

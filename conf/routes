@@ -59,7 +59,13 @@ POST    /users/:id/delete           controllers.Users.delete(id:Long)
 GET     /loans                      controllers.Loans.index
 
 # New Loan
-GET     /loans/new                  controllers.Loans.newLoan
+GET     /loans/new                  controllers.Loans.newLoan(ownerId:Option[Long],bookId:Option[Long])
+
+# Select user
+GET     /loans/new/selectuser       controllers.Loans.selectUser(ownerId:Option[Long],bookId:Option[Long],p:Int ?= 0, s:Int ?= 2, f ?= "")
+
+# Select book
+GET     /loans/new/selectbook       controllers.Loans.selectBook(ownerId:Option[Long],bookId:Option[Long],p:Int ?= 0, s:Int ?= 2, f ?= "")
 
 # Save Loan
 POST    /loans                      controllers.Loans.save
