@@ -30,7 +30,7 @@
             @book match {
               case None => {
                 <ul>
-                <li><a href="@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId)">Find a book</a></li>
+                <li><a href='@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId,"newLoan")'>Find a book</a></li>
                 <li>Use RFID Reader</li>
                 </ul>
               }
@@ -45,7 +45,7 @@
                     }
                 } 
                 </p>
-                <p>(<a href="@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId)">Edit</a>)</p>
+                <p>(<a href='@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId,"newLoan")'>Edit</a>)</p>
               }
 
             }
@@ -54,7 +54,7 @@
             <legend>Loan information</legend>
 
             <ul>
-                <li>Date loaned : </li>
+                <li>Date loaned :</li>
                 <li>Due date: </li>
             </ul>
 

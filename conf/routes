@@ -61,17 +61,21 @@ GET     /loans                      controllers.Loans.index
 # New Loan
 GET     /loans/new                  controllers.Loans.newLoan(ownerId:Option[Long],bookId:Option[Long])
 
+# Return Book
+GET     /loans/return               controllers.Loans.returnLoan(bookId:Option[Long])
+
 # Select user
 GET     /loans/new/selectuser       controllers.Loans.selectUser(ownerId:Option[Long],bookId:Option[Long],p:Int ?= 0, s:Int ?= 2, f ?= "")
 
 # Select book
-GET     /loans/new/selectbook       controllers.Loans.selectBook(ownerId:Option[Long],bookId:Option[Long],p:Int ?= 0, s:Int ?= 2, f ?= "")
+GET     /loans/new/selectbook       controllers.Loans.selectBook(ownerId:Option[Long] ?= None,bookId:Option[Long] ?= None,action:String,p:Int ?= 0, s:Int ?= 2, f ?= "")
 
 # Save Loan
 POST    /loans                      controllers.Loans.save
 
 # Return Book
-GET     /loans/return               controllers.Loans.returnLoan
+POST    /loans/close                controllers.Loans.close
+
 
 
 # Map static resources from the /public folder to the /assets URL path

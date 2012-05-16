@@ -1,4 +1,4 @@
-@(contextLoan: ContextLoan,currentPage: Page[(PhysicalBook, Option[Book])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
+@(contextLoan: ContextLoan,action:String,currentPage: Page[(PhysicalBook, Option[Book])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
 
 @****************************************
 * Helper generating navigation links    *
@@ -31,7 +31,7 @@
     }
 
     <p></p>
-        @helper.form(action=routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId),'class -> "form-horizontal") {
+        @helper.form(action=routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId,action),'class -> "form-horizontal") {
             <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Search by book title...">
             <input type="submit" id="searchsubmit" value="Search by title" class="btn btn-primary">
         }
@@ -59,7 +59,12 @@
                             <td>
                                 @book.map(_.title).getOrElse { <em>-</em> }
                             </td>
-                            <td><a href="@routes.Loans.newLoan(contextLoan.ownerId,Some(physicalbook.id.get.toLong))">Select</a></td>  
+                            @if(action=="newLoan") {
+                                <td><a href="@routes.Loans.newLoan(contextLoan.ownerId,Some(physicalbook.id.get.toLong))">Select</a></td>  
+                            }
+                            else {
+                                <td><a href="@routes.Loans.returnLoan(Some(physicalbook.id.get.toLong))">Select</a></td>  
+                            }
 
                         </tr>
                     }

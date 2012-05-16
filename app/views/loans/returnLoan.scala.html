@@ -1,13 +1,59 @@
+@(book:Option[(PhysicalBook,Option[Book])],loan:Option[(Loan,Option[User])])
 
+@import helper._
 
 @main("") {
 
     @mainLoans {
 
-    <h1>Return loan</h1>
+    <h1>Return book</h1>
+    @form(routes.Loans.close(),'class -> "form-horizontal") {
+
+            <legend>Book loaned</legend>
+
+            @book match {
+              case None => {
+                <ul>
+                <li><a href='@routes.Loans.selectBook(None,None,"returnLoan")'>Find a book</a></li>
+                <li>Use RFID Reader</li>
+                </ul>
+              }
+              case Some(_) => {
+                <p>@book.map { 
+                    case (physicalbook, book) => {
+                        <ul>
+                            <li>@physicalbook.id</li>
+                            <li>@book.map(_.isbn).getOrElse { <em>-</em> }</li>
+                            <li>@book.map(_.title).getOrElse { <em>-</em> } </li>
+                        </ul>
+                    }
+                } 
+                </p>
+                <p>(<a href='@routes.Loans.selectBook(None,None,"returnLoan")'>Edit</a>)</p>
+              }
+
+            }
+            
+
+            <legend>Loan information</legend>
+
+              @loan.map {
+              case (loan,user) => {
+                    <ul>
+                        <li>@loan.id</li>
+                        <li>@user.map(_.login).get</li>
+                        <li>@loan.dateBorrowed.format("MMM dd yyyy")</li>
+                        <li>@loan.dateDue.format("MMM dd yyyy")</li>
+                    </ul>
+              }
+
+              }
+
+                    
+                <div class="form-actions">
+                    <a href="@routes.Loans.index()" class="btn">Cancel</a>
+                    <input type="submit" value="Close this loan" class="btn btn-primary">  
+    }
 
     }
-    
-    
-
 }

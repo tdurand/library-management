@@ -35,25 +35,34 @@ object Loans extends Controller {
   /**
    * Display the return loan page
   */
-  def returnLoan = Action {
-    Ok(html.loans.returnLoan())
+  def returnLoan(bookId:Option[Long]) = Action {
+    var book:Option[(PhysicalBook,Option[Book])]=None
+    var loan:Option[(Loan,Option[User])]=None
+    if(bookId.isDefined) {
+        book = PhysicalBook.findByIdWithBook(bookId.get)
+        loan = Loan.findByPhysicalBookWithUser(bookId.get)
+    }
+    Ok(html.loans.returnLoan(book,loan))
   }
 
   def selectUser(ownerId:Option[Long],bookId:Option[Long],page: Int= 0, orderBy: Int=2, filter: String="") = Action { implicit request =>
     Ok(html.loans.selectUser(
-      ContextLoan(ownerId:Option[Long],bookId:Option[Long]),
+      ContextLoan(ownerId,bookId),
       User.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
       orderBy, filter
     ))
   }
 
-  def selectBook(ownerId:Option[Long],bookId:Option[Long],page: Int= 0, orderBy: Int=2, filter: String="") = Action { implicit request =>
+  def selectBook(ownerId:Option[Long]=None,bookId:Option[Long]=None,action:String,page: Int= 0, orderBy: Int=2, filter: String="") = Action { implicit request =>
     Ok(html.loans.selectBook(
-      ContextLoan(ownerId:Option[Long],bookId:Option[Long]),
+      ContextLoan(ownerId,bookId),
+      action,
       PhysicalBook.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
       orderBy, filter
     ))
   }
 
   def save = TODO
+
+  def close = TODO
 }
