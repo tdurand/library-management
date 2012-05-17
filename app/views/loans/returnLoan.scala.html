@@ -7,7 +7,7 @@
     @mainLoans {
 
     <h1>Return book</h1>
-    @form(routes.Loans.close(),'class -> "form-horizontal") {
+    @form(routes.Loans.close,'class -> "form-horizontal") {
 
             <legend>Book loaned</legend>
 
@@ -17,6 +17,8 @@
                 <li><a href='@routes.Loans.selectBook(None,None,"returnLoan")'>Find a book</a></li>
                 <li>Use RFID Reader</li>
                 </ul>
+
+                <div id="selectBook"></div>
               }
               case Some(_) => {
                 <p>@book.map { 
@@ -30,6 +32,8 @@
                 } 
                 </p>
                 <p>(<a href='@routes.Loans.selectBook(None,None,"returnLoan")'>Edit</a>)</p>
+
+                
               }
 
             }
@@ -40,11 +44,12 @@
               @loan.map {
               case (loan,user) => {
                     <ul>
-                        <li>@loan.id</li>
-                        <li>@user.map(_.login).get</li>
-                        <li>@loan.dateBorrowed.format("MMM dd yyyy")</li>
-                        <li>@loan.dateDue.format("MMM dd yyyy")</li>
+                        <li>User: @user.map(_.login).get</li>
+                        <li>Date borrowed: @loan.dateBorrowed.format("MMM dd yyyy")</li>
+                        <li>Date due: @loan.dateDue.format("MMM dd yyyy")</li>
+                        <li><strong>Date returned: DATE HERE</strong></li>
                     </ul>
+                    <input type="hidden" name="bookId" value="@loan.idPhysicalBook">
               }
 
               }
@@ -56,4 +61,15 @@
     }
 
     }
+
+    <script type="text/javascript">
+        /*jQuery(document).ready(function($) {
+            $.ajax({
+               url: '@routes.Loans.selectBook(None,None,"returnLoan")',
+               success: function(msg){
+                    $('#selectBook').html($(msg).find('.selectBook'));
+               }
+            });
+        }); */
+    </script>
 }

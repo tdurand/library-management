@@ -99,7 +99,7 @@ object Users extends Controller with Secured {
   /**
    * Display the users details of a existing User.
    *
-   * @param id Id of the computer to edit
+   * @param id Id of the user see details
    */
   def details(id: Long) = Action {
     val details=User.details(id)

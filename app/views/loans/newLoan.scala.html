@@ -1,4 +1,4 @@
-@(owner:Option[User],book:Option[(PhysicalBook,Option[Book])],contextLoan: ContextLoan)
+@(owner:Option[User],book:Option[(PhysicalBook,Option[Book])],contextLoan: ContextLoan,dateBorrowed:java.util.Date,dateDue:java.util.Date)
 
 @import helper._
 
@@ -20,9 +20,12 @@
               }
               case Some(_) => {
                 <p>@owner.get.login (<a href="@routes.Loans.selectUser(contextLoan.ownerId,contextLoan.bookId)">Edit</a>)</p>
+                <input type="hidden" name="ownerId" value="@owner.get.id">
               }
 
               }
+
+
             
 
             <legend>Book loaned</legend>
@@ -38,10 +41,10 @@
                 <p>@book.map { 
                     case (physicalbook, book) => {
                         <ul>
-                            <li>@physicalbook.id</li>
                             <li>@book.map(_.isbn).getOrElse { <em>-</em> }</li>
                             <li>@book.map(_.title).getOrElse { <em>-</em> } </li>
                         </ul>
+                        <input type="hidden" name="bookId" value="@physicalbook.id">
                     }
                 } 
                 </p>
@@ -54,8 +57,8 @@
             <legend>Loan information</legend>
 
             <ul>
-                <li>Date loaned :</li>
-                <li>Due date: </li>
+                <li>Date borrowed : @dateBorrowed.format("dd MMM yyyy")</li>
+                <li><strong>Due date: @dateDue.format("dd MMM yyyy")</strong></li>
             </ul>
 
                     

@@ -29,11 +29,12 @@
                     <strong>Done!</strong> @message
                 </div>
     }
-
+    <div class="selectBook">
     <p></p>
         @helper.form(action=routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId,action),'class -> "form-horizontal") {
             <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Search by book title...">
             <input type="submit" id="searchsubmit" value="Search by title" class="btn btn-primary">
+            <input type="hidden" name="action" value="@action">
         }
     
     @Option(currentPage.items).filterNot(_.isEmpty).map { physicalbooks =>
@@ -60,12 +61,10 @@
                                 @book.map(_.title).getOrElse { <em>-</em> }
                             </td>
                             @if(action=="newLoan") {
-                                <td><a href="@routes.Loans.newLoan(contextLoan.ownerId,Some(physicalbook.id.get.toLong))">Select</a></td>  
+                                <td><a class="btn btn-success" href="@routes.Loans.newLoan(contextLoan.ownerId,Some(physicalbook.id.get.toLong))">Select</a></td>  
+                            } else {
+                                <td><a class="btn btn-success" href="@routes.Loans.returnLoan(Some(physicalbook.id.get.toLong))">Select</a></td>  
                             }
-                            else {
-                                <td><a href="@routes.Loans.returnLoan(Some(physicalbook.id.get.toLong))">Select</a></td>  
-                            }
-
                         </tr>
                     }
                 }
@@ -106,6 +105,8 @@
         </div>
         
     }
+
+</div>
     }
 }
 

@@ -88,6 +88,3 @@ DROP SEQUENCE IF EXISTS physicalbook_seq;
 DROP SEQUENCE IF EXISTS loan_seq;
 DROP SEQUENCE IF EXISTS user_seq;
 DROP SEQUENCE IF EXISTS library_seq;
-
-
-

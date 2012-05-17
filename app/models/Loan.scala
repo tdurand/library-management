@@ -8,7 +8,7 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class Loan(id : Pk[Long]= NotAssigned,idUser:Long,idPhysicalBook:Long,dateBorrowed:Date,dateDue:Date,dateReturned:Option[Date])
+case class Loan(id : Pk[Long]= NotAssigned,idUser:Long,idPhysicalBook:Long,dateBorrowed:Date,dateDue:Date,var dateReturned:Option[Date])
 
 object Loan {
   
@@ -49,5 +49,50 @@ object Loan {
       SQL("select * from loan left join user on loan.idUser = user.id where loan.idPhysicalBook = {idPhysicalBook}").on('idPhysicalBook -> idPhysicalBook).as(Loan.withUser.singleOpt)
     }
   }
+
+  def findByPhysicalBook(idPhysicalBook:Long):Option[Loan] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from loan where loan.idPhysicalBook = {idPhysicalBook}").on('idPhysicalBook -> idPhysicalBook).as(Loan.simple.singleOpt)
+    }
+  }
+
+  /**
+   * Insert a new loan.
+   */
+  def insert(loan: Loan) = {
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+          insert into loan values (nextval('loan_seq'), 
+            {ownerId},{bookId},{dateBorrowed},{dateDue},null)
+        """
+      ).on(
+        'ownerId -> loan.idUser,
+        'bookId -> loan.idPhysicalBook,
+        'dateBorrowed -> loan.dateBorrowed,
+        'dateDue -> loan.dateDue
+      ).executeUpdate()
+    }
+  }
+
+  /**
+   * Close a loan.
+   */
+  def close(loan: Loan) = {
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update loan
+          set dateReturned={dateReturned} 
+          where id = {id}
+        """
+      ).on(
+        'id -> loan.id,
+        'dateReturned -> loan.dateReturned
+      ).executeUpdate()
+    }
+  }
+
+
 
 }

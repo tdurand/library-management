@@ -50,7 +50,7 @@
                             case user => {
                                 <tr>
                                     <td>@user.login</td>
-                                    <td><a href="@routes.Loans.newLoan(Some(user.id.get.toLong),contextLoan.bookId)">Select</a></td>
+                                    <td><a class="btn btn-success" href="@routes.Loans.newLoan(Some(user.id.get.toLong),contextLoan.bookId)">Select</a></td>
                                 </tr>
                             }
                                 

@@ -8,18 +8,20 @@ import anorm._
 import views._
 import models._
 
+import java.util.Date
+
 object Loans extends Controller {
   
   val Home = Redirect(routes.Loans.index)
 
-  def index = Action { 
-    Ok(html.loans.index()) 
+  def index = Action { implicit request =>
+    Ok(html.loans.index())
   }
 
   /**
    * Display the new loan page.
    */
-  def newLoan(ownerId:Option[Long],bookId:Option[Long]) = Action {
+  def newLoan(ownerId:Option[Long],bookId:Option[Long]) = Action { implicit request =>
     var user:Option[User]=None
     var book:Option[(PhysicalBook,Option[Book])]=None
     if(ownerId.isDefined) {
@@ -29,7 +31,13 @@ object Loans extends Controller {
         book = PhysicalBook.findByIdWithBook(bookId.get)
     }
 
-    Ok(html.loans.newLoan(user,book,ContextLoan(ownerId,bookId)))
+    val dateBorrowed:Date= new java.util.Date()
+
+    //Date due 15 day after
+    val theFuture:Long = System.currentTimeMillis() + (86400 * 15 * 1000) //TODO externalize
+    val dateDue:Date=new java.util.Date(theFuture)
+
+    Ok(html.loans.newLoan(user,book,ContextLoan(ownerId,bookId),dateBorrowed,dateDue))
   }
 
   /**
@@ -62,7 +70,40 @@ object Loans extends Controller {
     ))
   }
 
-  def save = TODO
+  val saveLoanForm = Form( tuple(
+                        "bookId" -> longNumber,
+                        "ownerId" -> longNumber
+                        ))
 
-  def close = TODO
+  def save() = Action { implicit request =>
+    
+    val dateBorrowed:Date= new java.util.Date()
+
+    //Date due 15 day after
+    val theFuture:Long = System.currentTimeMillis() + (86400 * 15 * 1000) //TODO externalize
+    val dateDue:Date=new java.util.Date(theFuture)
+
+    saveLoanForm.bindFromRequest.fold(
+      formWithErrors => Home.flashing("error" -> "Error in parameters"),
+      value => {
+        Loan.insert(Loan(NotAssigned,value._2,value._1,dateBorrowed,dateDue,None))
+        Home.flashing("success" -> "Loan has been created")
+      }
+    )
+  }
+
+  val returnLoanForm = Form( "bookId" -> longNumber )
+
+  def close = Action { implicit request =>
+    val dateReturned:Date= new java.util.Date()
+    returnLoanForm.bindFromRequest.fold(
+      formWithErrors => Home.flashing("error" -> "Problem while closing"),
+      bookId => Loan.findByPhysicalBook(bookId).map { loan =>
+          loan.dateReturned=Some(dateReturned)
+          Loan.close(loan)
+          Home.flashing("success" -> "Loan has been closed")
+      }.getOrElse(Home.flashing("error" -> "Loan not found"))
+   )
+  }
 }
+    
