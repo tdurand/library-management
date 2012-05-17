@@ -34,6 +34,20 @@ object Loan {
   val withUser = Loan.simple ~ (User.simple ?) map {
     case loan~user => (loan,user)
   }
+
+  /**
+   * Parse a (Loan,Option[PhysicalBook,Option[Book]]) from a ResultSet
+   */
+  val withBook = Loan.simple ~ (PhysicalBook.withBook ?) map {
+    case loan~physicalbookWithBook => (loan,physicalbookWithBook)
+  }
+  
+  /**
+   * Parse a (Loan,Option[(PhysicalBook,Option[Book])],Option[User])) from a ResultSet
+   */
+  val withBookandUser = Loan.simple ~ (PhysicalBook.withBook ?) ~ (User.simple ?) map {
+    case loan~physicalbookWithBook~user => (loan,physicalbookWithBook,user)
+  }
   
   // -- Queries
 
@@ -44,15 +58,21 @@ object Loan {
     }
   }
   
-  def findByPhysicalBookWithUser(idPhysicalBook:Long):Option[(Loan, Option[User])] = {
+  def findActiveLoanByPhysicalBookWithUser(idPhysicalBook:Long):Option[(Loan, Option[User])] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from loan left join user on loan.idUser = user.id where loan.idPhysicalBook = {idPhysicalBook}").on('idPhysicalBook -> idPhysicalBook).as(Loan.withUser.singleOpt)
+      SQL("select * from loan left join user on loan.idUser = user.id where loan.idPhysicalBook = {idPhysicalBook} and loan.dateReturned is NULL").on('idPhysicalBook -> idPhysicalBook).as(Loan.withUser.singleOpt)
     }
   }
 
   def findByPhysicalBook(idPhysicalBook:Long):Option[Loan] = {
     DB.withConnection { implicit connection =>
       SQL("select * from loan where loan.idPhysicalBook = {idPhysicalBook}").on('idPhysicalBook -> idPhysicalBook).as(Loan.simple.singleOpt)
+    }
+  }
+
+  def findActiveLoanByPhysicalBook(idPhysicalBook:Long):Option[Loan] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from loan where loan.idPhysicalBook = {idPhysicalBook} and loan.dateReturned is NULL").on('idPhysicalBook -> idPhysicalBook).as(Loan.simple.singleOpt)
     }
   }
 
@@ -93,6 +113,51 @@ object Loan {
     }
   }
 
+  /**
+   * Return a page of (Loan,Option[PhysicalBook,Option[Book]],Option[User]).
+   *
+   * @param page Page to display
+   * @param pageSize Number of physicalbook per page
+   * @param orderBy Book property used for sorting
+   * @param filter Filter applied on the name column
+   */
+  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])] = {
+    
+    val offest = pageSize * page
+    
+    DB.withConnection { implicit connection =>
+      
+      val loans = SQL(
+        """
+          select * from loan 
+          left join physicalbook on loan.idPhysicalBook = physicalbook.id
+          left join book on physicalbook.idBook = book.id
+          left join user on loan.idUser = user.id
+          where book.title like {filter}
+          order by {orderBy} nulls last
+          limit {pageSize} offset {offset}
+        """
+      ).on(
+        'pageSize -> pageSize, 
+        'offset -> offest,
+        'filter -> filter,
+        'orderBy -> orderBy
+      ).as(Loan.withBookandUser *)
+
+      val totalRows = SQL(
+        """
+          select count(*) from loan 
+          where loan.dateBorrowed like {filter}
+        """
+      ).on(
+        'filter -> filter
+      ).as(scalar[Long].single)
+
+      Page(loans, page, offest, totalRows)
+      
+    }
+    
+  }
 
 
 }

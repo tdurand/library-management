@@ -11,6 +11,7 @@ CREATE TABLE `Book` (
 CREATE TABLE `PhysicalBook` (
   `id` INTEGER NOT NULL,
   `idBook` INTEGER NOT NULL,
+  `loaned` BOOLEAN,
   PRIMARY KEY (`id`)
 );
 
@@ -66,17 +67,16 @@ INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq')
 INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Millénium 2','928AJZNSN');
 INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Millénium 3','2882ANSBN');
 
-INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES (nextval('physicalbook_seq'),'1');
-INSERT INTO `PhysicalBook` (`id`,`idBook`) VALUES (nextval('physicalbook_seq'),'1');
+INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1',TRUE);
+INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1',FALSE);
 
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','jpedro','test');
 
 INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','1','2001-02-16 20:14:12','2001-02-16 20:14:12',NULL);
-INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','2','2001-02-16 20:14:12','2001-02-16 20:14:12',NULL);
+
 
 # --- !Downs
-
 DROP TABLE IF EXISTS `Book`;
 DROP TABLE IF EXISTS `PhysicalBook`;
 DROP TABLE IF EXISTS `Loan`;

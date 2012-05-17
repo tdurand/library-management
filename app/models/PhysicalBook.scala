@@ -6,7 +6,7 @@ import anorm._
 import anorm.SqlParser._
 import models._
 
-case class PhysicalBook(id : Pk[Long]= NotAssigned,idBook:Long)
+case class PhysicalBook(id : Pk[Long]= NotAssigned,idBook:Long,var loaned:Boolean = false)
 
 object PhysicalBook {
   
@@ -90,7 +90,56 @@ object PhysicalBook {
     }
     
   }
-  
+
+  /**
+   * Return a page of (PhysicalBook,Book).
+   *
+   * @param page Page to display
+   * @param pageSize Number of physicalbook per page
+   * @param orderBy Book property used for sorting
+   * @param filter Filter applied on the name column
+   */
+  def listLoaned(loaned:Boolean,page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(PhysicalBook, Option[Book])] = {
+    
+    val offest = pageSize * page
+    
+    DB.withConnection { implicit connection =>
+      
+      val physicalbooks = SQL(
+        """
+          select * from physicalbook 
+          left join book on physicalbook.idBook = book.id
+          where book.title like {filter}
+          and physicalbook.loaned={loaned}
+          order by {orderBy} nulls last
+          limit {pageSize} offset {offset}
+        """
+      ).on(
+        'pageSize -> pageSize, 
+        'offset -> offest,
+        'filter -> filter,
+        'orderBy -> orderBy,
+        'loaned -> loaned
+      ).as(PhysicalBook.withBook *)
+
+      val totalRows = SQL(
+        """
+          select count(*) from physicalbook 
+          left join book on physicalbook.idBook = book.id
+          where book.title like {filter}
+          and physicalbook.loaned={loaned}
+        """
+      ).on(
+        'filter -> filter,
+        'loaned -> loaned
+      ).as(scalar[Long].single)
+
+      Page(physicalbooks, page, offest, totalRows)
+      
+    }
+    
+  }
+
   /**
    * Insert a new physicalbook.
    */
@@ -98,10 +147,30 @@ object PhysicalBook {
     DB.withConnection { implicit connection =>
       SQL(
         """
-          insert into physicalbook values (nextval('physicalbook_seq'),{idBook})
+          insert into physicalbook values (nextval('physicalbook_seq'),{idBook},{loaned})
         """
       ).on(
-        'idBook -> physicalbook.idBook
+        'idBook -> physicalbook.idBook,
+        'loaned -> physicalbook.loaned
+      ).executeUpdate()
+    }
+  }
+
+  /**
+   * Update a physicalbook.
+   */
+  def update(id: Long, physicalbook: PhysicalBook) = {
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update physicalbook
+          set idBook = {idBook}, loaned = {loaned}
+          where id = {id}
+        """
+      ).on(
+        'id -> id,
+        'idBook -> physicalbook.idBook,
+        'loaned -> physicalbook.loaned
       ).executeUpdate()
     }
   }

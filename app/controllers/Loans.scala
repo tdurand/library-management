@@ -12,11 +12,7 @@ import java.util.Date
 
 object Loans extends Controller {
   
-  val Home = Redirect(routes.Loans.index)
-
-  def index = Action { implicit request =>
-    Ok(html.loans.index())
-  }
+  val Home = Redirect(routes.Loans.list())
 
   /**
    * Display the new loan page.
@@ -46,9 +42,11 @@ object Loans extends Controller {
   def returnLoan(bookId:Option[Long]) = Action {
     var book:Option[(PhysicalBook,Option[Book])]=None
     var loan:Option[(Loan,Option[User])]=None
+
     if(bookId.isDefined) {
         book = PhysicalBook.findByIdWithBook(bookId.get)
-        loan = Loan.findByPhysicalBookWithUser(bookId.get)
+        loan = Loan.findActiveLoanByPhysicalBookWithUser(bookId.get)
+        loan.map(_._1.dateReturned=Some(new java.util.Date()))
     }
     Ok(html.loans.returnLoan(book,loan))
   }
@@ -62,10 +60,15 @@ object Loans extends Controller {
   }
 
   def selectBook(ownerId:Option[Long]=None,bookId:Option[Long]=None,action:String,page: Int= 0, orderBy: Int=2, filter: String="") = Action { implicit request =>
+    var loaned:Boolean=true
+    if(action=="newLoan") {
+        loaned=false
+    } 
+
     Ok(html.loans.selectBook(
       ContextLoan(ownerId,bookId),
       action,
-      PhysicalBook.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
+      PhysicalBook.listLoaned(loaned,page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
       orderBy, filter
     ))
   }
@@ -86,6 +89,10 @@ object Loans extends Controller {
     saveLoanForm.bindFromRequest.fold(
       formWithErrors => Home.flashing("error" -> "Error in parameters"),
       value => {
+        PhysicalBook.findById(value._1).map { physicalbook =>
+            physicalbook.loaned=true
+            PhysicalBook.update(value._1,physicalbook)
+        }.getOrElse(Home.flashing("error" -> "Error while updating PhysicalBook"))
         Loan.insert(Loan(NotAssigned,value._2,value._1,dateBorrowed,dateDue,None))
         Home.flashing("success" -> "Loan has been created")
       }
@@ -98,12 +105,32 @@ object Loans extends Controller {
     val dateReturned:Date= new java.util.Date()
     returnLoanForm.bindFromRequest.fold(
       formWithErrors => Home.flashing("error" -> "Problem while closing"),
-      bookId => Loan.findByPhysicalBook(bookId).map { loan =>
+      bookId => Loan.findActiveLoanByPhysicalBook(bookId).map { loan =>
           loan.dateReturned=Some(dateReturned)
+
+          PhysicalBook.findById(bookId).map { physicalbook =>
+            physicalbook.loaned=false
+            PhysicalBook.update(bookId,physicalbook)
+          }.getOrElse(Home.flashing("error" -> "Error while updating PhysicalBook"))
+
           Loan.close(loan)
           Home.flashing("success" -> "Loan has been closed")
       }.getOrElse(Home.flashing("error" -> "Loan not found"))
    )
+  }
+
+  /**
+   * Display the paginated list of loans.
+   *
+   * @param page Current page number (starts from 0)
+   * @param orderBy Column to be sorted
+   * @param filter Filter applied on computer names
+   */
+  def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
+    Ok(html.loans.list(
+      Loan.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
+      orderBy, filter
+    ))
   }
 }
     

@@ -39,15 +39,15 @@ POST    /copies                    controllers.PhysicalBooks.save
 # Users list (look at the default values for pagination parameters)
 GET     /users                      controllers.Users.list(p:Int ?= 0, s:Int ?= 2)
 
-# Users details 
-GET     /users/:id                  controllers.Users.details(id:Long)
-
 # Add User
 GET     /users/new                  controllers.Users.create
 POST    /users                      controllers.Users.save
 
+# Users details 
+GET     /users/:id                  controllers.Users.details(id:Long)
+
 # Edit existing User
-GET     /users/:id                  controllers.Users.edit(id:Long)
+GET     /users/:id/edit             controllers.Users.edit(id:Long)
 POST    /users/:id                  controllers.Users.update(id:Long)
 
 # Delete a user
@@ -55,8 +55,8 @@ POST    /users/:id/delete           controllers.Users.delete(id:Long)
 
 ##################### LOANS ######################
 
-# Loan index
-GET     /loans                      controllers.Loans.index
+# Loan list
+GET     /loans                      controllers.Loans.list(p:Int ?= 0, s:Int ?= 2, f ?= "")
 
 # New Loan
 GET     /loans/new                  controllers.Loans.newLoan(ownerId:Option[Long],bookId:Option[Long])

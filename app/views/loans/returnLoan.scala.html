@@ -45,9 +45,9 @@
               case (loan,user) => {
                     <ul>
                         <li>User: @user.map(_.login).get</li>
-                        <li>Date borrowed: @loan.dateBorrowed.format("MMM dd yyyy")</li>
-                        <li>Date due: @loan.dateDue.format("MMM dd yyyy")</li>
-                        <li><strong>Date returned: DATE HERE</strong></li>
+                        <li>Date borrowed: @loan.dateBorrowed.format("dd MMM yyyy")</li>
+                        <li>Date due: @loan.dateDue.format("dd MMM yyyy")</li>
+                        <li><strong>Date returned: @loan.dateReturned.get.format("dd MMM yyyy")</strong></li>
                     </ul>
                     <input type="hidden" name="bookId" value="@loan.idPhysicalBook">
               }
@@ -56,7 +56,7 @@
 
                     
                 <div class="form-actions">
-                    <a href="@routes.Loans.index()" class="btn">Cancel</a>
+                    <a href="@routes.Loans.list()" class="btn">Cancel</a>
                     <input type="submit" value="Close this loan" class="btn btn-primary">  
     }
 

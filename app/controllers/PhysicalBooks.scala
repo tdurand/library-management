@@ -24,7 +24,9 @@ object PhysicalBooks extends Controller {
     mapping(
       "id" -> ignored(NotAssigned:Pk[Long]),
       "idBook" -> longNumber
-    )(PhysicalBook.apply)(PhysicalBook.unapply)
+    )
+    ((id, idBook) => PhysicalBook(id,idBook))
+    ((physicalbook: PhysicalBook) => Some(physicalbook.id, physicalbook.idBook))
   )
   
   /**
