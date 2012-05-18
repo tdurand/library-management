@@ -121,11 +121,19 @@ object Loan {
    * @param orderBy Book property used for sorting
    * @param filter Filter applied on the name column
    */
-  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])] = {
+  def list(activeLoan:Boolean,page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])] = {
     
     val offest = pageSize * page
     
     DB.withConnection { implicit connection =>
+        
+      var activeQuery:String=""
+      if(activeLoan) {
+        activeQuery="is NULL"
+      }
+      else {
+        activeQuery="is NOT NULL"
+      }
       
       val loans = SQL(
         """
@@ -133,7 +141,8 @@ object Loan {
           left join physicalbook on loan.idPhysicalBook = physicalbook.id
           left join book on physicalbook.idBook = book.id
           left join user on loan.idUser = user.id
-          where book.title like {filter}
+          where book.title like {filter} and
+                loan.dateReturned """+activeQuery+"""
           order by {orderBy} nulls last
           limit {pageSize} offset {offset}
         """
@@ -147,7 +156,8 @@ object Loan {
       val totalRows = SQL(
         """
           select count(*) from loan 
-          where loan.dateBorrowed like {filter}
+          where loan.dateBorrowed like {filter} and
+                loan.dateReturned """+activeQuery+"""
         """
       ).on(
         'filter -> filter

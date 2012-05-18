@@ -128,9 +128,10 @@ object Loans extends Controller {
    */
   def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
     Ok(html.loans.list(
-      Loan.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
-      orderBy, filter
-    ))
+      Loan.list(true,page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
+      Loan.list(false,page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
+      orderBy, filter)
+    )
   }
 }
     

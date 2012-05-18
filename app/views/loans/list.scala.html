@@ -1,4 +1,5 @@
-@(currentPage: Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
+@(activeLoansPage: Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])],
+closedLoansPage: Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
 
 @****************************************
 * Helper generating navigation links    *
@@ -19,38 +20,20 @@
     </th>
 }
 
-@main("loans")("") {
-    @mainLoans("list") {
-    
-    <h1>Loans</h1>
-
-    @flash.get("success").map { message =>
-                <div class="alert alert-success">
-                    <strong>Done!</strong> @message
-                </div>
-    }
-
-    <div id="actions">
-        
-        @helper.form(action=routes.Loans.list(),'class -> "form-horizontal") {
-            <!-- <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by book title...">
-            <input type="submit" id="searchsubmit" value="Filter by title" class="btn btn-primary"> -->
-        }
-        
-    </div>
-    
+@tableLoan(currentPage: Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])]) = {
     @Option(currentPage.items).filterNot(_.isEmpty).map { loanwithuserandbook =>
         
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     @header(1, "Loan id")
-                    <th>dateBorrowed</th>
-                    <th>dateDue</th>
-                    <th>dateReturned</th>
                     <th>User</th>
                     <th>ISBN</th>
                     <th>Title</th>
+                    <th>dateBorrowed</th>
+                    <th>dateDue</th>
+                    <th>dateReturned</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -59,9 +42,6 @@
                     case (loan, physicalbook,user) => {
                         <tr>
                             <td>@loan.id</td>
-                            <td>@loan.dateBorrowed.format("dd MMM yyyy")</td>
-                            <td>@loan.dateDue.format("dd MMM yyyy")</td>
-                            <td>@loan.dateReturned.map(_.format("dd MMM yyyy"))</td>
                             <td>@user.map(_.login).getOrElse { <em>-</em> }</td>
 
                             @physicalbook.map { 
@@ -72,12 +52,14 @@
                             <td>
                                 @book.map(_.title).getOrElse { <em>-</em> }
                             </td>
+                            <td>@loan.dateBorrowed.format("dd MMM yyyy")</td>
+                            <td>@loan.dateDue.format("dd MMM yyyy")</td>
+                            <td>@loan.dateReturned.map(_.format("dd MMM yyyy"))</td>
+                            
 
                         </tr>
                     }
                 }
-
-                        </tr>
                     }
                 }
 
@@ -117,6 +99,35 @@
         </div>
         
     }
+}
+
+@main("loans")("") {
+    @mainLoans("list") {
+    
+    <h1>Loans</h1>
+
+    @flash.get("success").map { message =>
+                <div class="alert alert-success">
+                    <strong>Done!</strong> @message
+                </div>
+    }
+
+    <div id="actions">
+        
+        @helper.form(action=routes.Loans.list(),'class -> "form-horizontal") {
+            <!-- <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by book title...">
+            <input type="submit" id="searchsubmit" value="Filter by title" class="btn btn-primary"> -->
+        }
+        
+    </div>
+
+    <h2>Active Loans</h2>
+    @tableLoan(activeLoansPage)
+
+    <h2>Closed Loans</h2>
+    @tableLoan(closedLoansPage)
+    
+    
     }
 }
 
