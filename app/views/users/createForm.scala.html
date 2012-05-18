@@ -4,8 +4,8 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
 
-@main("") {
-    @mainUsers {
+@main("users")("") {
+    @mainUsers("add") {
             <h1>Add an user</h1>
 
             @form(routes.Users.save(),'class -> "form-horizontal") {

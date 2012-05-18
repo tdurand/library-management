@@ -98,5 +98,9 @@ object Books extends Controller {
     Book.delete(id)
     Home.flashing("success" -> "Book has been deleted")
   }
+
+  def tag = TODO
+
+  def untag = TODO
   
 }

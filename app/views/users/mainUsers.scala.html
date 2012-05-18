@@ -1,11 +1,24 @@
-@(content:Html)
+@(section:String)(content:Html)
+
+@menuItems = @{Seq(
+    ("list", "List users", routes.Users.list()),
+    ("add", "Add user", routes.Users.create())
+)}
+
+
 
 <div class="row">
         <div class="span2">
             <ul class="nav nav-list well">
-                  <li class="nav-header">Users</li>
-                  <li class="active"><a href="@routes.Users.list()">List users</a></li>
-                  <li><a href="@routes.Users.create()">Add user</a></li>
+                <li class="nav-header">Users</li>
+                @menuItems.map {
+                       case (key, title, url) if(key == section) => {
+                           <li class="active"><a href="@url">@title</a></li>
+                       }
+                       case (key, title, url) => {
+                           <li><a href="@url">@title</a></li>
+                       }
+                   }
             </ul>
         </div>
         <div class="span10">

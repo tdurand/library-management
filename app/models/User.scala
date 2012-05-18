@@ -27,6 +27,13 @@ object User {
    * Parse a List[(User,Loan)] from a ResultSet
   */ 
   val withLoans = User.simple ~ (Loan.simple ?) map(flatten)
+
+  /**
+   * Parse a List[(User,Loan)] from a ResultSet
+  */ 
+  val withLoansAndBooks = User.simple ~ (Loan.simple ?) ~ (PhysicalBook.withBook ?) map {
+    case user~loan~physicalbookWithBook => (user,loan,physicalbookWithBook)
+  }
   
   // -- Queries
   
@@ -141,20 +148,22 @@ object User {
     }
 
     
-    def details(idUser:Long):(User,List[Option[Loan]]) = {
+    def details(idUser:Long):List[(User,Option[Loan],Option[(PhysicalBook, Option[Book])])] = {
       DB.withConnection { implicit connection =>
       
-          val userwithLoans:List[(User,Option[Loan])]= SQL(
+          val userwithLoansAndBooks= SQL(
             """
                 select * from user 
                 left join loan on user.id = loan.idUser
+                left join physicalbook on loan.idPhysicalBook=physicalbook.id
+                left join Book on physicalbook.idBook=book.id
                 where user.id = {idUser}
             """
           ).on(
             'idUser -> idUser
-          ).as(User.withLoans *)
+          ).as(User.withLoansAndBooks *)
 
-          return (userwithLoans.head._1,userwithLoans.map(_._2))
+          return userwithLoansAndBooks
       }
     } 
 }

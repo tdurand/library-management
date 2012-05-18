@@ -1,31 +1,95 @@
-@(user : User,loans: List[Option[Loan]])
+@(user:User,loansAndBooks: List[(User,Option[Loan],Option[(PhysicalBook, Option[Book])])])
 
-@import helper._
+@main("users")("") {
+    @mainUsers("none") {
 
-@implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
 
-@main("") {
-    @mainUsers {
-    
     <h1>@user.login details</h1>
-            
-    <ul>
-        @loans.map {
-            case loan => {
-                <li>@loan.get.id
-                    <ul>
-                    <li>@loan.get.idUser</li>
-                    <li>@loan.get.idPhysicalBook</li>
-                    <li>@loan.get.dateBorrowed.format("MMM dd yyyy")</li>
-                    <li>@loan.get.dateDue.format("MMM dd yyyy")</li>
-                    <li>@loan.get.dateReturned.exists(_.format("dd MMM yyyy"))
-                    </li>
-                    </ul>
-                </li>
-                
+    <p></p>
+    <p>Active loans:</p>
+
+    <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>dateBorrowed</th>
+                    <th>dateDue</th>
+                    <th>dateReturned</th>
+                </tr>
+            </thead>
+            <tbody>
+
+    @loansAndBooks.map { 
+        case (user,loan,physicalbook) => {
+            @if(loan.exists(!_.dateReturned.isDefined)) {
+                <tr>
+                @physicalbook.map { 
+                    case (physicalbook, book) => {
+                <td>
+                    @book.map(_.isbn).getOrElse { <em>-</em> }
+                </td>
+                <td>
+                    @book.map(_.title).getOrElse { <em>-</em> }
+                </td>
+                }
+                }
+
+                @loan.map { loan =>
+                    <td>@loan.dateBorrowed.format("dd MMM yyyy")</td>
+                    <td>@loan.dateDue.format("dd MMM yyyy")</td>
+                    <td>@loan.dateReturned.map(_.format("dd MMM yyyy"))</td>
+                }
+            </tr>
             }
         }
-    </ul>
-}
+    }
+            </tbody>
+    </table>
+
+
+    <p>Closed loans:</p>
+
+    <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>dateBorrowed</th>
+                    <th>dateDue</th>
+                    <th>dateReturned</th>
+                </tr>
+            </thead>
+            <tbody>
+
+    @loansAndBooks.map { 
+        case (user,loan,physicalbook) => {
+            @if(loan.exists(_.dateReturned.isDefined)) {
+                <tr>
+                @physicalbook.map { 
+                    case (physicalbook, book) => {
+                <td>
+                    @book.map(_.isbn).getOrElse { <em>-</em> }
+                </td>
+                <td>
+                    @book.map(_.title).getOrElse { <em>-</em> }
+                </td>
+                }
+                }
+
+                @loan.map { loan =>
+                    <td>@loan.dateBorrowed.format("dd MMM yyyy")</td>
+                    <td>@loan.dateDue.format("dd MMM yyyy")</td>
+                    <td>@loan.dateReturned.map(_.format("dd MMM yyyy"))</td>
+                }
+            </tr>
+            }
+        }
+    }
+            </tbody>
+    </table>
+
+
+    }
 }
 

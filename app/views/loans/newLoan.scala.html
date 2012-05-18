@@ -2,9 +2,9 @@
 
 @import helper._
 
-@main("") {
+@main("loans")("") {
 
-    @mainLoans {
+    @mainLoans("new") {
 
     <h1>New loan</h1>
     @form(routes.Loans.save(),'class -> "form-horizontal") {

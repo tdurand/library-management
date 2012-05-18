@@ -1,11 +1,18 @@
-@(user: String)(content: Html)
+@(section:String)(user: String)(content: Html)
+
+@menuTopBar = @{Seq(
+    ("home", "Home", routes.Application.index()),
+    ("books", "Books", routes.Books.list()),
+    ("users", "Users", routes.Users.list()),
+    ("loans", "Loan and Return", routes.Loans.list())
+)}
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>Library Management</title>
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")"> 
         <link rel="stylesheet" type="text/css" media="screen" href="@routes.Assets.at("stylesheets/main.css")"> 
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")"></script>
     </head>
     <body>
 
@@ -14,10 +21,14 @@
         <div class="container">
           <a class="brand" href="@routes.Application.index()">Library Management</a>
             <ul class="nav">
-              <li><a href="@routes.Application.index()">Home</a></li>
-              <li><a href="@routes.Books.list()">Books</a></li>
-              <li><a href="@routes.Users.list()">Users</a></li>
-              <li><a href="@routes.Loans.list()">Loan and Return</a></li>
+                @menuTopBar.map {
+                       case (key, title, url) if(key == section) => {
+                           <li class="active"><a href="@url">@title</a></li>
+                       }
+                       case (key, title, url) => {
+                           <li><a href="@url">@title</a></li>
+                       }
+                   }
             </ul>
             <ul class="nav pull-right">
                 <li class=""><a href="@routes.Application.logout()">Logout (@user)</a></li>

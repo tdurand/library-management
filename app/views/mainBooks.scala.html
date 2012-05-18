@@ -1,15 +1,37 @@
-@(content:Html)
+@(section:String)(content:Html)
+
+@menuCatalog = @{Seq(
+    ("listcatalog", "List catalog", routes.Books.list()),
+    ("new", "Add book", routes.Books.create())
+)}
+
+@menuBookonShelf = @{Seq(
+    ("listcopies", "List copies", routes.PhysicalBooks.list()),
+    ("tag", "Tag copy", routes.Books.tag()),
+    ("untag", "Untag copy", routes.Books.untag())
+)}
 
 <div class="row">
         <div class="span2">
             <ul class="nav nav-list well">
-                  <li class="nav-header">Catalog</li>
-                  <li><a href="@routes.Books.list()">List catalog</a></li>
-                  <li><a href="@routes.Books.create()">Add book</a></li>
-                  <li class="nav-header">Books on shelf</li>
-                  <li><a href="@routes.PhysicalBooks.list()">List copies</a></li>
-                  <li><a href="">Tag copy</a></li>
-                  <li><a href="#">Untag copy</a></li>
+                <li class="nav-header">Catalog</li>
+                @menuCatalog.map {
+                       case (key, title, url) if(key == section) => {
+                           <li class="active"><a href="@url">@title</a></li>
+                       }
+                       case (key, title, url) => {
+                           <li><a href="@url">@title</a></li>
+                       }
+                   }
+                <li class="nav-header">Books on shelf</li>
+                @menuBookonShelf.map {
+                       case (key, title, url) if(key == section) => {
+                           <li class="active"><a href="@url">@title</a></li>
+                       }
+                       case (key, title, url) => {
+                           <li><a href="@url">@title</a></li>
+                       }
+                   }
             </ul>
         </div>
         <div class="span10">

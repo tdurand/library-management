@@ -1,11 +1,23 @@
-@(content:Html)
+@(section:String)(content:Html)
+
+@menuItems = @{Seq(
+    ("list", "List of loans", routes.Loans.list()),
+    ("new", "Make a new loan", routes.Loans.newLoan(None,None)),
+    ("return", "Return of a loan", routes.Loans.returnLoan(None))
+)}
 
 <div class="row">
         <div class="span2">
             <ul class="nav nav-list well">
-                  <li class="nav-header"></li>
-                  <li><a href="@routes.Loans.newLoan(None,None)">Make a new loan</a></li>
-                  <li><a href="@routes.Loans.returnLoan(None)">Return of a loan</a></li>
+                <li class="nav-header">Users</li>
+                @menuItems.map {
+                       case (key, title, url) if(key == section) => {
+                           <li class="active"><a href="@url">@title</a></li>
+                       }
+                       case (key, title, url) => {
+                           <li><a href="@url">@title</a></li>
+                       }
+                   }
             </ul>
         </div>
         <div class="span10">

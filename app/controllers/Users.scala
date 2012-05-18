@@ -103,7 +103,7 @@ object Users extends Controller with Secured {
    */
   def details(id: Long) = Action {
     val details=User.details(id)
-    Ok(html.users.details(details._1,details._2))
+    Ok(html.users.details(details.head._1,details))
   }
   
 }

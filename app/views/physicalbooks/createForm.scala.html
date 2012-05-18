@@ -4,8 +4,8 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
 
-@main("") {
-    @mainBooks {
+@main("books")("") {
+    @mainBooks("newcopy") {
             <h1>Add a copy</h1>
 
             @form(routes.PhysicalBooks.save(),'class -> "form-horizontal") {

@@ -24,6 +24,9 @@ POST    /books                      controllers.Books.save
 GET     /books/:id                  controllers.Books.edit(id:Long)
 POST    /books/:id                  controllers.Books.update(id:Long)
 
+GET     /books/tag                  controllers.Books.tag
+GET     /books/untag                controllers.Books.untag
+
 # Delete a book
 POST    /books/:id/delete           controllers.Books.delete(id:Long)
 
