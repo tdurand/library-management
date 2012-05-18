@@ -57,4 +57,83 @@ table.listitems .header a {
     color: #666;
 }
 
+.dashboard-content,.iconchoice-content {
+    width: 100%;
+    /*float:left;*/
+}
+
+.dashboard-content a {
+    text-decoration:none;
+}
+
+.dashboard-content .icon{
+    top:30px;
+    float:left;
+    width:128px;
+    height:128px;
+    background-repeat: no-repeat;
+    margin: 18px;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Displaying the title attribute below the icon: */
+
+.dashboard-content,.iconchoice-content .icon:after{
+    bottom: -25px;
+    color: #260D0A;
+    content: attr(title);
+    font-size: 14px;
+    height: 20px;
+    left: -20px;
+    overflow: hidden;
+    position: absolute;
+    text-align: center;
+    white-space: nowrap;
+    width: 128px;
+    text-shadow: rgba(0, 0, 0, .2) 0 1px 1px;
+}
+
+.icon.icon-books {
+    background-image:url(/assets/images/icons/book.png);
+}
+
+.icon.icon-users {
+    background-image:url(/assets/images/icons/users.png);
+}
+.icon.icon-loans {
+    background-image:url(/assets/images/icons/up-down.png);
+}
+
+
+.iconchoice-content .icon {
+    float:left;
+    width:64px;
+    height:64px;
+    background-repeat: no-repeat;
+    margin: 18px;
+    margin-left:50px;
+    margin-bottom:50px;
+    margin-top:0;
+    cursor:pointer;
+    position: relative;
+}
+
+
+.icon.icon-LMlist {
+    background-image:url(/assets/images/icons/list64.png);
+}
+
+.icon.icon-LMuser {
+    background-image:url(/assets/images/icons/user64.png);
+}
+
+.icon.icon-LMbook {
+    background-image:url(/assets/images/icons/book64.png);
+}
+
+.icon.icon-rfid {
+    background-image:url(/assets/images/icons/rfid64.png);
+}
+
 

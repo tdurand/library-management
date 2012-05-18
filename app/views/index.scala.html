@@ -4,8 +4,21 @@
     
     <h1>Dashboard</h1>
     
-    <ul>
-        <li><a href="@routes.Books.list()">Books</a></li>
-        <li><a href="@routes.Users.list()">Users</a></li>
-    </ul>
+    <div class="row">
+        <div class="dashboard-content">
+            <a href="@routes.Books.list()">
+                <div class="icon icon-books" title="Books">
+                </div>
+            </a>
+            <a href="@routes.Users.list()">
+                <div class="icon icon-users" title="Users">
+                </div>
+            </a>
+            <a href="@routes.Loans.list()">
+                <div class="icon icon-loans" title="Loan and Return">
+                </div>
+            </a>
+        </div>
+    </div>
+
 }
