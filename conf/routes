@@ -73,6 +73,9 @@ GET     /loans/new/selectuser       controllers.Loans.selectUser(ownerId:Option[
 # Select book
 GET     /loans/new/selectbook       controllers.Loans.selectBook(ownerId:Option[Long] ?= None,bookId:Option[Long] ?= None,action:String,p:Int ?= 0, s:Int ?= 2, f ?= "")
 
+GET     /loans/selectbookRFID       controllers.Loans.selectBookRFID
+
+
 # Save Loan
 POST    /loans                      controllers.Loans.save
 

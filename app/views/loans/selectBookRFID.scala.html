@@ -1,0 +1,26 @@
+
+
+@main("books")("") {
+    @mainLoans("") {
+        <input type="button" id="read" value="Read">
+
+        <div id="readResult"></div>
+
+        <applet mayscript="true" code = 'rfid/RFIDAccess.class' archive = '@routes.Assets.at("libs/applet-library-management-signed.jar"),@routes.Assets.at("libs/log4j-1.2.16.jar"),@routes.Assets.at("libs/yarf-0.2.jar"),@routes.Assets.at("libs/plugin.jar")' name="rfid" height="100" width="300"></applet>
+
+
+        <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $("#read").click(function(){
+                    document.applets['rfid'].read();
+                });
+
+                
+            });
+
+            function printResult(result) {
+                    $("#readResult").text(result)
+            }
+        </script>
+    }
+}

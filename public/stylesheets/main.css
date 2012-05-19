@@ -79,7 +79,7 @@ table.listitems .header a {
 
 /* Displaying the title attribute below the icon: */
 
-.dashboard-content,.iconchoice-content .icon:after{
+.dashboard-content .icon:after,.iconchoice-content .icon:after{
     bottom: -25px;
     color: #260D0A;
     content: attr(title);
