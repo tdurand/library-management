@@ -21,7 +21,7 @@ GET     /books/new                  controllers.Books.create
 POST    /books                      controllers.Books.save
 
 # Edit existing Book
-GET     /books/:id                  controllers.Books.edit(id:Long)
+GET     /books/:id/edit                  controllers.Books.edit(id:Long)
 POST    /books/:id                  controllers.Books.update(id:Long)
 
 GET     /books/tag                  controllers.Books.tag
@@ -73,8 +73,11 @@ GET     /loans/new/selectuser       controllers.Loans.selectUser(ownerId:Option[
 # Select book
 GET     /loans/new/selectbook       controllers.Loans.selectBook(ownerId:Option[Long] ?= None,bookId:Option[Long] ?= None,action:String,p:Int ?= 0, s:Int ?= 2, f ?= "")
 
+# Select book via RFID
 GET     /loans/selectbookRFID       controllers.Loans.selectBookRFID
 
+# Get a loan by physicalbook id
+GET     /loans/book/:id             controllers.Loans.findActiveLoanByPhysicalBookId(id:Long)
 
 # Save Loan
 POST    /loans                      controllers.Loans.save
@@ -82,7 +85,8 @@ POST    /loans                      controllers.Loans.save
 # Return Book
 POST    /loans/close                controllers.Loans.close
 
-
+# Javascript routing
+GET     /assets/javascripts/routes  controllers.Application.javascriptRoutes
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

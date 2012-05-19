@@ -169,5 +169,25 @@ object Loan {
     
   }
 
+  def findActiveLoanByPhysicalBookId(idPhysicalBook:Long):Option[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])] = {
+     DB.withConnection { implicit connection =>
+        val loan = SQL(
+        """
+          select * from loan 
+          left join physicalbook on loan.idPhysicalBook = physicalbook.id
+          left join book on physicalbook.idBook = book.id
+          left join user on loan.idUser = user.id
+          where physicalbook.id={idPhysicalBook} and
+                loan.dateReturned is NULL
+        """
+      ).on(
+        'idPhysicalBook -> idPhysicalBook 
+      ).as(Loan.withBookandUser.singleOpt)
+
+      return loan
+    }
+  }
+
+
 
 }

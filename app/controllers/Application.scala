@@ -13,6 +13,18 @@ object Application extends Controller with Secured {
   def index = IsAuthenticated { user => _ =>
     Ok(views.html.index(user))
   }
+
+  // -- Javascript routing
+
+  def javascriptRoutes = Action {
+    import routes.javascript._
+    Ok(
+      Routes.javascriptRouter("jsRoutes")(
+        Loans.findActiveLoanByPhysicalBookId,
+        Loans.returnLoan
+      )
+    ).as("text/javascript") 
+  }
   
   // -- Authentication
 

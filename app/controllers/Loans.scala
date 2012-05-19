@@ -137,5 +137,11 @@ object Loans extends Controller {
       orderBy, filter)
     )
   }
+
+  def findActiveLoanByPhysicalBookId(idPhysicalBook:Long) = Action { implicit request =>
+    Loan.findActiveLoanByPhysicalBookId(idPhysicalBook).map { loanwithuserandbook =>
+      Ok(html.loans.showLoanWithUserAndBook(loanwithuserandbook))
+    }.getOrElse(NotFound)
+  }
 }
     

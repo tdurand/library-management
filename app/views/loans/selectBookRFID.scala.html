@@ -1,17 +1,34 @@
 
 
 @main("books")("") {
-    @mainLoans("") {
-        <input type="button" id="read" value="Read">
+    @mainLoans("return") {
 
-        <div id="readResult"></div>
+        <h1>Read book from RFID</h1>
+        <p></p>
 
-        <applet mayscript="true" code = 'rfid/RFIDAccess.class' archive = '@routes.Assets.at("libs/applet-library-management-signed.jar"),@routes.Assets.at("libs/log4j-1.2.16.jar"),@routes.Assets.at("libs/yarf-0.2.jar"),@routes.Assets.at("libs/plugin.jar")' name="rfid" height="100" width="300"></applet>
+        <p>Please put your book on the reader and press READ</p>
+
+        <div class="alert alert-error print error" style="display:none"></div>
+        <div class="alert alert-success print success" style="display:none"></div>
+        <div class="alert alert-info print info" style="display:none"></div>
+
+        <p></p>
+        <input type="button" class="btn btn-large btn-primary" value="Read" id="read" />
+        <p></p>
+        <div id="loanResult"></div>
+
+        <a id="close" class="btn btn-large btn-success" href="" style="display:none">Close this loan</a>
+
+        <applet mayscript="true" code = 'rfid/RFIDAccess.class' archive = '@routes.Assets.at("libs/applet-library-management-signed.jar"),@routes.Assets.at("libs/log4j-1.2.16.jar"),@routes.Assets.at("libs/yarf-0.2.jar"),@routes.Assets.at("libs/plugin.jar")' name="rfid" height="0" width="0"></applet>
 
 
         <script type="text/javascript">
             jQuery(document).ready(function($) {
                 $("#read").click(function(){
+                    $(this).addClass("disabled");
+                    $(this).attr("disabled","disabled");
+                    $("#close").hide()
+                    $("#readStatus").text("Reading ...")
                     document.applets['rfid'].read();
                 });
 
@@ -19,8 +36,39 @@
             });
 
             function printResult(result) {
-                    $("#readResult").text(result)
+                    printMessage("info","Reading successfull, Searching corresponding loan...");
+                    findLoanByBookId(2);
             }
+
+            function findLoanByBookId(id) {
+                jsRoutes.controllers.Loans.findActiveLoanByPhysicalBookId(id).ajax({
+                    success: function(html){
+                        printMessage("success","Loan found for this book");
+                        $('#loanResult').html(html);
+                        showOKButton(id);
+                    },
+                   error:function() {
+                        $("#read").removeClass("disabled");
+                        $("#read").removeAttr("disabled");
+                        printMessage("error","Error, no active loan found");
+                   } 
+                });
+            }
+
+            function showOKButton(id) {
+                $("#read").removeClass("disabled");
+                $("#read").removeAttr("disabled");
+                $("#close").attr("href",jsRoutes.controllers.Loans.returnLoan(id).url);
+                $("#close").show();
+            }
+
+            function printMessage(status,message) {
+                $(".print").hide();
+                $(".print."+status).show().text(message);
+            }
+
+
+
         </script>
     }
 }
