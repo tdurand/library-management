@@ -13,12 +13,16 @@
 
             @book match {
               case None => {
-                <ul>
-                <li><a href='@routes.Loans.selectBook(None,None,"returnLoan")'>Find a book</a></li>
-                <li>Use RFID Reader</li>
-                </ul>
-
-                <div id="selectBook"></div>
+                <div class="iconchoice-content">
+                    <a href='@routes.Loans.selectBook(None,None,"returnLoan")'>
+                        <div class="icon icon-LMlist" title="Select in the list">
+                        </div>
+                    </a>
+                    <a href='@routes.Loans.selectBookRFID()'>
+                        <div class="icon icon-rfid" title="Read from RFID">
+                        </div>
+                    </a>
+                </div>
               }
               case Some(_) => {
                 <p>@book.map { 
