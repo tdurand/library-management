@@ -8,7 +8,7 @@ import anorm._
 import views._
 import models._
 
-object PhysicalBooks extends Controller {
+object PhysicalBooks extends Controller with Secured {
   
   /**
    * This result directly redirect to the physicalbooks home.
@@ -36,7 +36,7 @@ object PhysicalBooks extends Controller {
    * @param orderBy Column to be sorted
    * @param filter Filter applied on computer names
    */
-  def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
+  def list(page: Int, orderBy: Int, filter: String) = IsAuthenticated { implicit user => implicit request =>
     Ok(html.physicalbooks.list(
       PhysicalBook.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
       orderBy, filter
@@ -46,7 +46,7 @@ object PhysicalBooks extends Controller {
   /**
    * Handle physicalbook deletion.
    */
-  def delete(id: Long) = Action {
+  def delete(id: Long) = IsAuthenticated { implicit user => implicit request =>
     PhysicalBook.delete(id)
     Home.flashing("success" -> "PhysicalBook has been deleted")
   }
@@ -54,7 +54,7 @@ object PhysicalBooks extends Controller {
   /**
    * Display the 'add copy form'.
    */
-  def create(idBook:Long) = Action {
+  def create(idBook:Long) = IsAuthenticated { implicit user => implicit request =>
     Book.findById(idBook).map { book =>
       Ok(html.physicalbooks.createForm(physicalbookForm.fill(PhysicalBook(NotAssigned,idBook)),book))
     }.getOrElse(NotFound)
@@ -63,7 +63,7 @@ object PhysicalBooks extends Controller {
   /**
    * Handle the 'add copy form' submission.
    */
-  def save = Action { implicit request =>
+  def save = IsAuthenticated { implicit user => implicit request =>
     
     physicalbookForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.physicalbooks.createForm(formWithErrors,Book.findById(physicalbookForm.data.get("idBook").get.toLong).get)),
@@ -74,14 +74,14 @@ object PhysicalBooks extends Controller {
     )
   }
 
-  def findPhysicalBookWithBook(idPhysicalBook:Long) = Action { implicit request =>
+  def findPhysicalBookWithBook(idPhysicalBook:Long) = IsAuthenticated { implicit user => implicit request =>
     PhysicalBook.findByIdWithBook(idPhysicalBook).map { physicalbookWithBook =>
       Ok(html.physicalbooks.showPhysicalBook(physicalbookWithBook))
     }.getOrElse(NotFound)
   }
 
-  def tag(id: Long) = Action {
-    Ok(html.books.tagBookRFID(id))
+  def tag(id: Long) = IsAuthenticated { implicit user => implicit request =>
+    Ok(html.physicalbooks.tagBookRFID(id))
   }
   
 }

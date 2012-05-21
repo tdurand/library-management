@@ -1,4 +1,4 @@
-@(book:Option[(PhysicalBook,Option[Book])],loan:Option[(Loan,Option[User])])
+@(book:Option[(PhysicalBook,Option[Book])],loan:Option[(Loan,Option[User])])(implicit user: String)
 
 @import helper._
 
@@ -32,7 +32,7 @@
     </table>
 }
 
-@main("loans")("") {
+@main("loans") {
 
     @mainLoans("return") {
 

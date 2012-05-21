@@ -1,6 +1,6 @@
-@(id:Long)
+@(id:Long)(implicit user: String)
 
-@main("books")("") {
+@main("books") {
     @mainBooks("tag") {
 
         <h1>Tag book</h1>

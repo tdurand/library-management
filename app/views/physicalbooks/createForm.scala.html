@@ -1,10 +1,10 @@
-@(copyForm: Form[PhysicalBook],book:Book)
+@(copyForm: Form[PhysicalBook],book:Book)(implicit user: String)
 
 @import helper._
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) }
 
-@main("books")("") {
+@main("books") {
     @mainBooks("newcopy") {
             <h1>Add a copy</h1>
 

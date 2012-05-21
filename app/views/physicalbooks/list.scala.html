@@ -1,4 +1,4 @@
-@(currentPage: Page[(PhysicalBook, Option[Book])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
+@(currentPage: Page[(PhysicalBook, Option[Book])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash,user: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -19,7 +19,7 @@
     </th>
 }
 
-@main("books")("") {
+@main("books") {
     @mainBooks("listcopies") {
     
     <h1>@Messages("physicalbook.list.title")</h1>

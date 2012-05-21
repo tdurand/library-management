@@ -1,4 +1,4 @@
-@(contextLoan: ContextLoan,action:String,currentPage: Page[(PhysicalBook, Option[Book])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
+@(contextLoan: ContextLoan,action:String,currentPage: Page[(PhysicalBook, Option[Book])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash,user: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -19,7 +19,7 @@
     </th>
 }
 
-@main("books")("") {
+@main("loans") {
     @mainLoans("") {
     
     <h1>Select Book</h1>

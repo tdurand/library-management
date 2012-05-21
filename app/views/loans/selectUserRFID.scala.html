@@ -1,6 +1,6 @@
-@(contextLoan: ContextLoan)
+@(contextLoan: ContextLoan)(implicit user: String)
 
-@main("books")("") {
+@main("loans") {
     @mainLoans("") {
 
         <h1>Read user from RFID</h1>

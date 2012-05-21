@@ -1,4 +1,4 @@
-@(owner:Option[User],book:Option[(PhysicalBook,Option[Book])],contextLoan: ContextLoan,dateBorrowed:java.util.Date,dateDue:java.util.Date)
+@(owner:Option[User],book:Option[(PhysicalBook,Option[Book])],contextLoan: ContextLoan,dateBorrowed:java.util.Date,dateDue:java.util.Date)(implicit user: String)
 
 @import helper._
 
@@ -35,7 +35,7 @@
     </table>
 }
 
-@main("loans")("") {
+@main("loans") {
 
     @mainLoans("new") {
 

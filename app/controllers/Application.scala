@@ -10,8 +10,8 @@ import models.User
 
 object Application extends Controller with Secured {
   
-  def index = IsAuthenticated { user => _ =>
-    Ok(views.html.index(user))
+  def index = IsAuthenticated { implicit user => _ =>
+    Ok(views.html.index())
   }
 
   // -- Javascript routing

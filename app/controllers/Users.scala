@@ -35,7 +35,7 @@ object Users extends Controller with Secured {
    * @param page Current page number (starts from 0)
    * @param orderBy Column to be sorted
    */
-  def list(page: Int, orderBy: Int) = Action { implicit request =>
+  def list(page: Int, orderBy: Int) = IsAuthenticated { implicit user => implicit request =>
     Ok(html.users.list(
       User.list(page = page, orderBy = orderBy),
       orderBy
@@ -47,7 +47,7 @@ object Users extends Controller with Secured {
    *
    * @param id Id of the user to edit
    */
-  def update(id: Long) = Action { implicit request =>
+  def update(id: Long) = IsAuthenticated { implicit user => implicit request =>
     userForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.users.editForm(id, formWithErrors)),
       user => {
@@ -60,14 +60,14 @@ object Users extends Controller with Secured {
   /**
    * Display the 'new user form'.
    */
-  def create = Action {
+  def create = IsAuthenticated { implicit user => implicit request =>
     Ok(html.users.createForm(userForm))
   }
   
   /**
    * Handle the 'new user form' submission.
    */
-  def save = Action { implicit request =>
+  def save = IsAuthenticated { implicit user => implicit request =>
     userForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.users.createForm(formWithErrors)),
       user => {
@@ -80,7 +80,7 @@ object Users extends Controller with Secured {
   /**
    * Handle user deletion.
    */
-  def delete(id: Long) = Action {
+  def delete(id: Long) = IsAuthenticated { implicit user => implicit request =>
     User.delete(id)
     Home.flashing("success" -> "User has been deleted")
   }
@@ -90,9 +90,9 @@ object Users extends Controller with Secured {
    *
    * @param id Id of the user to edit
    */
-  def edit(id: Long) = Action {
-    User.findById(id).map { user =>
-      Ok(html.users.editForm(id, userForm.fill(user)))
+  def edit(id: Long) = IsAuthenticated { implicit user => implicit request =>
+    User.findById(id).map { theuser =>
+      Ok(html.users.editForm(id, userForm.fill(theuser)))
     }.getOrElse(NotFound)
   }
 
@@ -101,18 +101,18 @@ object Users extends Controller with Secured {
    *
    * @param id Id of the user see details
    */
-  def details(id: Long) = Action {
+  def details(id: Long) = IsAuthenticated { implicit user => implicit request =>
     val details=User.details(id)
     Ok(html.users.details(details.head._1,details))
   }
 
-  def findUserById(idUser:Long) = Action { implicit request =>
+  def findUserById(idUser:Long) = IsAuthenticated { implicit user => implicit request =>
     User.findById(idUser).map { user =>
       Ok(html.users.showUser(user))
     }.getOrElse(NotFound)
   }
 
-  def tag(id: Long) = Action {
+  def tag(id: Long) = IsAuthenticated { implicit user => implicit request =>
     Ok(html.users.tagUserRFID(id))
   }
   

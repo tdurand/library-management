@@ -1,4 +1,4 @@
-@(section:String)(user: String)(content: Html)
+@(section:String)(content: Html)(implicit user: String)
 
 @menuTopBar = @{Seq(
     ("home", "Home", routes.Application.index()),

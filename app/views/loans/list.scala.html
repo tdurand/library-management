@@ -1,5 +1,5 @@
 @(activeLoansPage: Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])],
-closedLoansPage: Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
+closedLoansPage: Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash,user: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -101,7 +101,7 @@ closedLoansPage: Page[(Loan,Option[(PhysicalBook,Option[Book])],Option[User])], 
     }
 }
 
-@main("loans")("") {
+@main("loans") {
     @mainLoans("list") {
     
     <h1>Loans</h1>

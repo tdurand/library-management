@@ -10,18 +10,18 @@ import models._
 
 import java.util.Date
 
-object Loans extends Controller {
+object Loans extends Controller with Secured {
   
   val Home = Redirect(routes.Loans.list())
 
   /**
    * Display the new loan page.
    */
-  def newLoan(ownerId:Option[Long],bookId:Option[Long]) = Action { implicit request =>
-    var user:Option[User]=None
+  def newLoan(ownerId:Option[Long],bookId:Option[Long]) = IsAuthenticated { implicit user => implicit request =>
+    var theuser:Option[User]=None
     var book:Option[(PhysicalBook,Option[Book])]=None
     if(ownerId.isDefined) {
-        user = User.findById(ownerId.get)
+        theuser = User.findById(ownerId.get)
     }
     if(bookId.isDefined) {
         book = PhysicalBook.findByIdWithBook(bookId.get)
@@ -33,13 +33,13 @@ object Loans extends Controller {
     val theFuture:Long = System.currentTimeMillis() + (86400 * 15 * 1000) //TODO externalize
     val dateDue:Date=new java.util.Date(theFuture)
 
-    Ok(html.loans.newLoan(user,book,ContextLoan(ownerId,bookId),dateBorrowed,dateDue))
+    Ok(html.loans.newLoan(theuser,book,ContextLoan(ownerId,bookId),dateBorrowed,dateDue))
   }
 
   /**
    * Display the return loan page
   */
-  def returnLoan(bookId:Option[Long]) = Action {
+  def returnLoan(bookId:Option[Long]) = IsAuthenticated { implicit user => implicit request =>
     var book:Option[(PhysicalBook,Option[Book])]=None
     var loan:Option[(Loan,Option[User])]=None
 
@@ -51,7 +51,7 @@ object Loans extends Controller {
     Ok(html.loans.returnLoan(book,loan))
   }
 
-  def selectUser(ownerId:Option[Long],bookId:Option[Long],page: Int= 0, orderBy: Int=2, filter: String="") = Action { implicit request =>
+  def selectUser(ownerId:Option[Long],bookId:Option[Long],page: Int= 0, orderBy: Int=2, filter: String="") = IsAuthenticated { implicit user => implicit request =>
     Ok(html.loans.selectUser(
       ContextLoan(ownerId,bookId),
       User.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
@@ -59,7 +59,7 @@ object Loans extends Controller {
     ))
   }
 
-  def selectBook(ownerId:Option[Long]=None,bookId:Option[Long]=None,action:String,page: Int= 0, orderBy: Int=2, filter: String="") = Action { implicit request =>
+  def selectBook(ownerId:Option[Long]=None,bookId:Option[Long]=None,action:String,page: Int= 0, orderBy: Int=2, filter: String="") = IsAuthenticated { implicit user => implicit request =>
     var loaned:Boolean=true
     if(action=="newLoan") {
         loaned=false
@@ -73,11 +73,11 @@ object Loans extends Controller {
     ))
   }
 
-  def selectBookRFID(ownerId:Option[Long]=None,bookId:Option[Long]=None,action:String) = Action { implicit request =>
+  def selectBookRFID(ownerId:Option[Long]=None,bookId:Option[Long]=None,action:String) = IsAuthenticated { implicit user => implicit request =>
     Ok(html.loans.selectBookRFID(ContextLoan(ownerId,bookId),action))
   }
 
-  def selectUserRFID(ownerId:Option[Long],bookId:Option[Long]) = Action { implicit request =>
+  def selectUserRFID(ownerId:Option[Long],bookId:Option[Long]) = IsAuthenticated { implicit user => implicit request =>
     Ok(html.loans.selectUserRFID(ContextLoan(ownerId,bookId)))
   }
 
@@ -86,7 +86,7 @@ object Loans extends Controller {
                         "ownerId" -> longNumber
                         ))
 
-  def save() = Action { implicit request =>
+  def save() = IsAuthenticated { implicit user => implicit request =>
     
     val dateBorrowed:Date= new java.util.Date()
 
@@ -109,7 +109,7 @@ object Loans extends Controller {
 
   val returnLoanForm = Form( "bookId" -> longNumber )
 
-  def close = Action { implicit request =>
+  def close = IsAuthenticated { implicit user => implicit request =>
     val dateReturned:Date= new java.util.Date()
     returnLoanForm.bindFromRequest.fold(
       formWithErrors => Home.flashing("error" -> "Problem while closing"),
@@ -134,7 +134,7 @@ object Loans extends Controller {
    * @param orderBy Column to be sorted
    * @param filter Filter applied on computer names
    */
-  def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
+  def list(page: Int, orderBy: Int, filter: String) = IsAuthenticated { implicit user => implicit request =>
     Ok(html.loans.list(
       Loan.list(true,page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
       Loan.list(false,page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
@@ -142,7 +142,7 @@ object Loans extends Controller {
     )
   }
 
-  def findActiveLoanByPhysicalBookId(idPhysicalBook:Long) = Action { implicit request =>
+  def findActiveLoanByPhysicalBookId(idPhysicalBook:Long) = IsAuthenticated { implicit user => implicit request =>
     Loan.findActiveLoanByPhysicalBookId(idPhysicalBook).map { loanwithuserandbook =>
       Ok(html.loans.showLoanWithUserAndBook(loanwithuserandbook))
     }.getOrElse(NotFound)

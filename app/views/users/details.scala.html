@@ -1,10 +1,10 @@
-@(user:User,loansAndBooks: List[(User,Option[Loan],Option[(PhysicalBook, Option[Book])])])
+@(theuser:User,loansAndBooks: List[(User,Option[Loan],Option[(PhysicalBook, Option[Book])])])(implicit user:String)
 
-@main("users")("") {
+@main("users") {
     @mainUsers("none") {
 
 
-    <h1>@user.login details</h1>
+    <h1>@theuser.login details</h1>
     <p></p>
     <p>Active loans:</p>
 

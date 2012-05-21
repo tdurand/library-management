@@ -1,4 +1,4 @@
-@(contextLoan: ContextLoan,currentPage: Page[User], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
+@(contextLoan: ContextLoan,currentPage: Page[User], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash,user: String))
 
 @****************************************
 * Helper generating navigation links    *
@@ -19,7 +19,7 @@
     </th>
 }
 
-@main("loans")("") {
+@main("loans") {
     @mainLoans("") {
 
         <h1>Select an user</h1>

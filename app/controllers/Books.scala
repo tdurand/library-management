@@ -8,7 +8,7 @@ import play.api.data.Forms._
 import anorm._
 import views._
 
-object Books extends Controller {
+object Books extends Controller with Secured {
   
   /**
    * This result directly redirect to the books home.
@@ -38,7 +38,7 @@ object Books extends Controller {
    * @param page Current page number (starts from 0)
    * @param orderBy Column to be sorted
    */
-  def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
+  def list(page: Int, orderBy: Int, filter: String) = IsAuthenticated { implicit user => implicit request =>
     Ok(html.books.list(
       Book.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
       orderBy, filter
@@ -50,7 +50,7 @@ object Books extends Controller {
    *
    * @param id Id of the computer to edit
    */
-  def edit(id: Long) = Action {
+  def edit(id: Long) = IsAuthenticated { implicit user => implicit request =>
     Book.findById(id).map { book =>
       Ok(html.books.editForm(id, bookForm.fill(book)))
     }.getOrElse(NotFound)
@@ -61,7 +61,7 @@ object Books extends Controller {
    *
    * @param id Id of the book to edit
    */
-  def update(id: Long) = Action { implicit request =>
+  def update(id: Long) = IsAuthenticated { implicit user => implicit request =>
     bookForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.books.editForm(id, formWithErrors)),
       book => {
@@ -74,14 +74,14 @@ object Books extends Controller {
   /**
    * Display the 'new book form'.
    */
-  def create = Action {
+  def create = IsAuthenticated { implicit user => implicit request =>
     Ok(html.books.createForm(bookForm))
   }
   
   /**
    * Handle the 'new book form' submission.
    */
-  def save = Action { implicit request =>
+  def save = IsAuthenticated { implicit user => implicit request =>
     bookForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.books.createForm(formWithErrors)),
       book => {
@@ -94,7 +94,7 @@ object Books extends Controller {
   /**
    * Handle book deletion.
    */
-  def delete(id: Long) = Action {
+  def delete(id: Long) = IsAuthenticated { implicit user => implicit request =>
     Book.delete(id)
     Home.flashing("success" -> "Book has been deleted")
   }

@@ -1,4 +1,4 @@
-@(currentPage: Page[User], currentOrderBy: Int)(implicit flash: play.api.mvc.Flash)
+@(currentPage: Page[User], currentOrderBy: Int)(implicit flash: play.api.mvc.Flash, user:String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -19,7 +19,7 @@
     </th>
 }
 
-@main("users")("") {
+@main("users") {
     @mainUsers("list") {
 
         <h1>@Messages("user.list.title")</h1>
