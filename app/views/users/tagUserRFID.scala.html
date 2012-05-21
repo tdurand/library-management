@@ -1,0 +1,114 @@
+@(id:Long)
+
+@main("users")("") {
+    @mainUsers("tag") {
+
+        <h1>Tag user card</h1>
+        <p></p>
+
+        <p>Please put your user card on the tag and press TAG</p>
+
+        <div class="alert alert-error print error" style="display:none"></div>
+        <div class="alert alert-success print success" style="display:none"></div>
+        <div class="alert alert-info print info" style="display:none"></div>
+
+        <p></p>
+        <input type="button" class="btn btn-large btn-primary" value="Tag" id="tag" />
+        <p></p>
+        <div id="userResult"></div>
+
+        <a id="Ok" class="btn btn-large btn-success" href="" style="display:none">Select this user</a>
+
+        <applet mayscript="true" code = 'rfid/RFIDAccess.class' archive = '@routes.Assets.at("libs/applet-library-management-signed.jar"),@routes.Assets.at("libs/log4j-1.2.16.jar"),@routes.Assets.at("libs/yarf-0.2.jar"),@routes.Assets.at("libs/plugin.jar")' name="rfid" height="0" width="0"></applet>
+
+
+        <script type="text/javascript">
+
+            var RFID = {};
+
+            RFID.main = function() {
+
+                settingHandlers = function() {
+                    $("#tag").click(function(){
+                        RFID.main.tag();
+                    });
+                };
+
+                rfidActionPerforming = function() {
+                    $(this).addClass("disabled");
+                    $(this).attr("disabled","disabled");
+                    $("#close").hide()
+                };
+
+                rfidActionDone= function() {
+                    $("#read").removeClass("disabled");
+                    $("#read").removeAttr("disabled");
+                };
+
+                showOkButton= function() {
+                    $("#close").show();
+                }
+
+                printMessage = function(status,message) {
+                    $(".print").hide();
+                    $(".print."+status).show().text(message);
+                };
+
+                findUserById = function(id) {
+                    jsRoutes.controllers.Users.findUserById(id).ajax({
+                        success: function(html){
+                            printMessage("success","User found");
+                            $('#userResult').html(html);
+                            rfidActionDone();
+                            showOkButton();
+                        },
+                       error:function() {
+                            rfidActionDone();
+                            printMessage("error","Error, no user found");
+
+                       } 
+                    });
+                }
+
+
+                return {
+                    init : function() {
+                        settingHandlers();
+                    },
+                    tag : function(id) {
+                        rfidActionPerforming();
+                        document.applets['rfid'].write(@id);
+                    }
+
+                }
+            }();
+
+            jQuery(document).ready(function($) {
+                RFID.main.init();
+            });
+
+            function printResult(result) {
+                console.log("printResult "+result)
+                printMessage("info","Writing successfull...");
+                findUserById(result);
+            }
+
+            function writeResult(result) {
+                    console.log("writeResult "+result)
+                    document.applets['rfid'].read();
+            }
+
+            function readResult(result) {
+                console.log("readResult "+result)
+            }
+
+            
+
+
+            
+
+
+
+        </script>
+    }
+}

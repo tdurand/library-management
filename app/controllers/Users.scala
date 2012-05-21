@@ -111,5 +111,9 @@ object Users extends Controller with Secured {
       Ok(html.users.showUser(user))
     }.getOrElse(NotFound)
   }
+
+  def tag(id: Long) = Action {
+    Ok(html.users.tagUserRFID(id))
+  }
   
 }

@@ -51,11 +51,11 @@ ALTER TABLE `Loan` ADD FOREIGN KEY (idUser) REFERENCES `User` (`id`);
 ALTER TABLE `Loan` ADD FOREIGN KEY (idPhysicalBook) REFERENCES `PhysicalBook` (`id`);
 ALTER TABLE `User` ADD FOREIGN KEY (idLibrary) REFERENCES `Library` (`id`);
 
-CREATE SEQUENCE book_seq start with 1;
-CREATE SEQUENCE physicalbook_seq start with 1;
-CREATE SEQUENCE loan_seq start with 1;
-CREATE SEQUENCE user_seq start with 1;
-CREATE SEQUENCE library_seq start with 1;
+CREATE SEQUENCE book_seq start with 1000;
+CREATE SEQUENCE physicalbook_seq start with 1000;
+CREATE SEQUENCE loan_seq start with 1000;
+CREATE SEQUENCE user_seq start with 1000;
+CREATE SEQUENCE library_seq start with 1000;
 
 INSERT INTO `Library` VALUES (nextval('library_seq'),'Default');
 
@@ -63,17 +63,17 @@ INSERT INTO `Library` VALUES (nextval('library_seq'),'Default');
 -- Test Data
 -- ---
 
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Millénium 1','2929ANDJS');
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Millénium 2','928AJZNSN');
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Millénium 3','2882ANSBN');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','Millénium 1','2929ANDJS');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','Millénium 2','928AJZNSN');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','Millénium 3','2882ANSBN');
 
-INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1',TRUE);
-INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1',FALSE);
+INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',TRUE);
+INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',FALSE);
 
-INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
-INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','jpedro','test');
+INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1000','tdurand','test');
+INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1000','jpedro','test');
 
-INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1','1','2001-02-16 20:14:12','2001-02-16 20:14:12',NULL);
+INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1000','1000','2001-02-16 20:14:12','2001-02-16 20:14:12',NULL);
 
 
 # --- !Downs

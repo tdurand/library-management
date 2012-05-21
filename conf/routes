@@ -50,7 +50,7 @@ GET     /users/new                  controllers.Users.create
 POST    /users                      controllers.Users.save
 
 #Show user
-GET     /users/show/:id                  controllers.Users.findUserById(id:Long)
+GET     /users/show/:id             controllers.Users.findUserById(id:Long)
 
 # Users details 
 GET     /users/:id                  controllers.Users.details(id:Long)
@@ -61,6 +61,9 @@ POST    /users/:id                  controllers.Users.update(id:Long)
 
 # Delete a user
 POST    /users/:id/delete           controllers.Users.delete(id:Long)
+
+# Tag user card
+GET     /users/:id/tag              controllers.Users.tag(id:Long)
 
 ##################### LOANS ######################
 
