@@ -73,8 +73,12 @@ object Loans extends Controller {
     ))
   }
 
-  def selectBookRFID = Action { implicit request =>
-    Ok(html.loans.selectBookRFID())
+  def selectBookRFID(ownerId:Option[Long]=None,bookId:Option[Long]=None,action:String) = Action { implicit request =>
+    Ok(html.loans.selectBookRFID(ContextLoan(ownerId,bookId),action))
+  }
+
+  def selectUserRFID(ownerId:Option[Long],bookId:Option[Long]) = Action { implicit request =>
+    Ok(html.loans.selectUserRFID(ContextLoan(ownerId,bookId)))
   }
 
   val saveLoanForm = Form( tuple(

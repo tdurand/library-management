@@ -2,64 +2,127 @@
 
 @import helper._
 
+@showPhysicalBook(physicalbookWithBook: (PhysicalBook, Option[Book])) = {
+    <div id="actions">
+                    <a class="btn" href='@routes.Loans.newLoan(contextLoan.ownerId,None)'>Change book</a>
+    </div>
+    <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Copy id</th>
+                    <th>Isbn</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @physicalbookWithBook match { 
+                    case (physicalbook, book) => {
+                        <tr>
+                            <td>@physicalbook.id</td>
+                            <td>
+                                @book.map(_.isbn).getOrElse { <em>-</em> }
+                            </td>
+                            <td>
+                                @book.map(_.title).getOrElse { <em>-</em> }
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+    </table>
+}
+
 @main("loans")("") {
 
     @mainLoans("new") {
 
-    <h1>New loan</h1>
+    <h1>Make a new loan</h1>
     @form(routes.Loans.save(),'class -> "form-horizontal") {
 
             <legend>Owner of the loan</legend>
 
               @owner match {
               case None => {
-                <ul>
-                <li><a href="@routes.Loans.selectUser(contextLoan.ownerId,contextLoan.bookId)">Select an user</a></li>
-                <li>Use RFID Card</li>
-                </ul>
+                <div class="iconchoice-content">
+                    <a href='@routes.Loans.selectUser(contextLoan.ownerId,contextLoan.bookId)'>
+                        <div class="icon icon-LMlist" title="Select in the list">
+                        </div>
+                    </a>
+                    <a href='@routes.Loans.selectUserRFID(contextLoan.ownerId,contextLoan.bookId)'>
+                        <div class="icon icon-rfid" title="Read from RFID">
+                        </div>
+                    </a>
+                </div>
               }
               case Some(_) => {
-                <p>@owner.get.login (<a href="@routes.Loans.selectUser(contextLoan.ownerId,contextLoan.bookId)">Edit</a>)</p>
+                <div id="actions">
+                    <a class="btn" href='@routes.Loans.newLoan(None,contextLoan.bookId)'>Change user</a>
+                </div>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@owner.get.login</td>
+                        </tr>
+                    </tbody>
+                </table>
+
                 <input type="hidden" name="ownerId" value="@owner.get.id">
               }
 
               }
 
-
-            
-
-            <legend>Book loaned</legend>
+            <legend>Book to loan</legend>
 
             @book match {
               case None => {
-                <ul>
-                <li><a href='@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId,"newLoan")'>Find a book</a></li>
-                <li>Use RFID Reader</li>
-                </ul>
+                <div class="iconchoice-content">
+                    <a href='@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId,"newLoan")'>
+                        <div class="icon icon-LMlist" title="Select in the list">
+                        </div>
+                    </a>
+                    <a href='@routes.Loans.selectBookRFID(contextLoan.ownerId,contextLoan.bookId,"newLoan")'>
+                        <div class="icon icon-rfid" title="Read from RFID">
+                        </div>
+                    </a>
+                </div>
               }
               case Some(_) => {
+                @showPhysicalBook(book.get)
                 <p>@book.map { 
                     case (physicalbook, book) => {
-                        <ul>
-                            <li>@book.map(_.isbn).getOrElse { <em>-</em> }</li>
-                            <li>@book.map(_.title).getOrElse { <em>-</em> } </li>
-                        </ul>
                         <input type="hidden" name="bookId" value="@physicalbook.id">
                     }
                 } 
                 </p>
-                <p>(<a href='@routes.Loans.selectBook(contextLoan.ownerId,contextLoan.bookId,"newLoan")'>Edit</a>)</p>
               }
 
             }
             
 
-            <legend>Loan information</legend>
+            <legend>New loan information</legend>
 
-            <ul>
-                <li>Date borrowed : @dateBorrowed.format("dd MMM yyyy")</li>
-                <li><strong>Due date: @dateDue.format("dd MMM yyyy")</strong></li>
-            </ul>
+            <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Date borrowed</th>
+                            <th>Due date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@dateBorrowed.format("dd MMM yyyy")</td>
+                            <td><strong>@dateDue.format("dd MMM yyyy")</strong></td>
+                        </tr>
+                    </tbody>
+            </table>
 
                     
                 <div class="form-actions">

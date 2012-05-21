@@ -34,6 +34,9 @@ POST    /books/:id/delete           controllers.Books.delete(id:Long)
 # Copy list (look at the default values for pagination parameters)
 GET     /copies                      controllers.PhysicalBooks.list(p:Int ?= 0, s:Int ?= 2, f ?= "")
 
+# Get a copy by id
+GET     /copies/:id                 controllers.PhysicalBooks.findPhysicalBookWithBook(id:Long)
+
 # Add Copy
 GET     /copies/new/:idBook        controllers.PhysicalBooks.create(idBook:Long)
 POST    /copies                    controllers.PhysicalBooks.save
@@ -45,6 +48,9 @@ GET     /users                      controllers.Users.list(p:Int ?= 0, s:Int ?= 
 # Add User
 GET     /users/new                  controllers.Users.create
 POST    /users                      controllers.Users.save
+
+#Show user
+GET     /users/show/:id                  controllers.Users.findUserById(id:Long)
 
 # Users details 
 GET     /users/:id                  controllers.Users.details(id:Long)
@@ -74,7 +80,10 @@ GET     /loans/new/selectuser       controllers.Loans.selectUser(ownerId:Option[
 GET     /loans/new/selectbook       controllers.Loans.selectBook(ownerId:Option[Long] ?= None,bookId:Option[Long] ?= None,action:String,p:Int ?= 0, s:Int ?= 2, f ?= "")
 
 # Select book via RFID
-GET     /loans/selectbookRFID       controllers.Loans.selectBookRFID
+GET     /loans/selectbookRFID       controllers.Loans.selectBookRFID(ownerId:Option[Long],bookId:Option[Long],action:String)
+
+# Select user via RFID
+GET     /loans/selectuserRFID       controllers.Loans.selectUserRFID(ownerId:Option[Long],bookId:Option[Long])
 
 # Get a loan by physicalbook id
 GET     /loans/book/:id             controllers.Loans.findActiveLoanByPhysicalBookId(id:Long)

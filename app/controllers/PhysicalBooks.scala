@@ -73,5 +73,11 @@ object PhysicalBooks extends Controller {
       }
     )
   }
+
+  def findPhysicalBookWithBook(idPhysicalBook:Long) = Action { implicit request =>
+    PhysicalBook.findByIdWithBook(idPhysicalBook).map { physicalbookWithBook =>
+      Ok(html.physicalbooks.showPhysicalBook(physicalbookWithBook))
+    }.getOrElse(NotFound)
+  }
   
 }

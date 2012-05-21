@@ -1,0 +1,43 @@
+@(loanwithuserandbook: (Loan,Option[(PhysicalBook,Option[Book])],Option[User]))
+    <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Loan id</th>
+                    <th>User</th>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>dateBorrowed</th>
+                    <th>dateDue</th>
+                    <th>dateReturned</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+                @loanwithuserandbook match { 
+                    case (loan, physicalbook,user) => {
+                        <tr>
+                            <td>@loan.id</td>
+                            <td>@user.map(_.login).getOrElse { <em>-</em> }</td>
+
+                            @physicalbook.map { 
+                                case (physicalbook, book) => {
+                            <td>
+                                @book.map(_.isbn).getOrElse { <em>-</em> }
+                            </td>
+                            <td>
+                                @book.map(_.title).getOrElse { <em>-</em> }
+                            </td>
+                            <td>@loan.dateBorrowed.format("dd MMM yyyy")</td>
+                            <td>@loan.dateDue.format("dd MMM yyyy")</td>
+                            <td>@loan.dateReturned.map(_.format("dd MMM yyyy"))</td>
+                            
+
+                        </tr>
+                    }
+                }
+                    }
+                }
+
+            </tbody>
+        </table>

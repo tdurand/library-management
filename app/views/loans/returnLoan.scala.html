@@ -2,6 +2,36 @@
 
 @import helper._
 
+@showPhysicalBook(physicalbookWithBook: (PhysicalBook, Option[Book])) = {
+    <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Copy id</th>
+                    <th>Isbn</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @physicalbookWithBook match { 
+                    case (physicalbook, book) => {
+                        <tr>
+                            <td>@physicalbook.id</td>
+                            <td>
+                                @book.map(_.isbn).getOrElse { <em>-</em> }
+                            </td>
+                            <td>
+                                @book.map(_.title).getOrElse { <em>-</em> }
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+    </table>
+}
+
 @main("loans")("") {
 
     @mainLoans("return") {
@@ -18,24 +48,19 @@
                         <div class="icon icon-LMlist" title="Select in the list">
                         </div>
                     </a>
-                    <a href='@routes.Loans.selectBookRFID()'>
+                    <a href='@routes.Loans.selectBookRFID(None,None,"returnLoan")'>
                         <div class="icon icon-rfid" title="Read from RFID">
                         </div>
                     </a>
                 </div>
               }
               case Some(_) => {
-                <p>@book.map { 
-                    case (physicalbook, book) => {
-                        <ul>
-                            <li>@physicalbook.id</li>
-                            <li>@book.map(_.isbn).getOrElse { <em>-</em> }</li>
-                            <li>@book.map(_.title).getOrElse { <em>-</em> } </li>
-                        </ul>
-                    }
-                } 
-                </p>
-                <p>(<a href='@routes.Loans.selectBook(None,None,"returnLoan")'>Edit</a>)</p>
+
+                <div id="actions">
+                    <a class="btn" href='@routes.Loans.returnLoan(None)'>Change book</a>
+                </div>
+
+                @showPhysicalBook(book.get)
 
                 
               }
@@ -43,25 +68,45 @@
             }
             
 
-            <legend>Loan information</legend>
+            <legend>Closing loan information</legend>
 
-              @loan.map {
-              case (loan,user) => {
-                    <ul>
-                        <li>User: @user.map(_.login).get</li>
-                        <li>Date borrowed: @loan.dateBorrowed.format("dd MMM yyyy")</li>
-                        <li>Date due: @loan.dateDue.format("dd MMM yyyy")</li>
-                        <li><strong>Date returned: @loan.dateReturned.get.format("dd MMM yyyy")</strong></li>
-                    </ul>
-                    <input type="hidden" name="bookId" value="@loan.idPhysicalBook">
-              }
-
-              }
-
+            @loan match {
+                case None => {
+                    @if(book.isDefined) {
+                        <div class="alert alert-error print error"><strong>Error:</strong> No active loan found for this book</div>
+                    }
+                }
+                case Some(_) => {
+                    @loan.map {
+                      case (loan,user) => {
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Date borrowed</th>
+                                    <th>Date due</th>
+                                    <th>Date returned</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@user.map(_.login).get</td>
+                                    <td>@loan.dateBorrowed.format("dd MMM yyyy")</td>
+                                    <td>@loan.dateDue.format("dd MMM yyyy")</td>
+                                    <td><strong>@loan.dateReturned.get.format("dd MMM yyyy")</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                            <input type="hidden" name="bookId" value="@loan.idPhysicalBook">
+                      }
+                    }
+                }
+            }
                     
                 <div class="form-actions">
                     <a href="@routes.Loans.list()" class="btn">Cancel</a>
-                    <input type="submit" value="Close this loan" class="btn btn-primary">  
+                    <input type="submit" value="Close this loan" class="btn btn-primary">
+                </div>  
     }
 
     }

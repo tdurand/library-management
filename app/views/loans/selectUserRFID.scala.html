@@ -1,12 +1,12 @@
-@(contextLoan: ContextLoan,action:String)
+@(contextLoan: ContextLoan)
 
 @main("books")("") {
     @mainLoans("") {
 
-        <h1>Read book from RFID</h1>
+        <h1>Read user from RFID</h1>
         <p></p>
 
-        <p>Please put your book on the reader and press READ</p>
+        <p>Please put your user card on the reader and press READ</p>
 
         <div class="alert alert-error print error" style="display:none"></div>
         <div class="alert alert-success print success" style="display:none"></div>
@@ -15,9 +15,9 @@
         <p></p>
         <input type="button" class="btn btn-large btn-primary" value="Read" id="read" />
         <p></p>
-        <div id="bookResult"></div>
+        <div id="userResult"></div>
 
-        <a id="close" class="btn btn-large btn-success" href="" style="display:none">Select this book</a>
+        <a id="close" class="btn btn-large btn-success" href="" style="display:none">Select this user</a>
 
         <applet mayscript="true" code = 'rfid/RFIDAccess.class' archive = '@routes.Assets.at("libs/applet-library-management-signed.jar"),@routes.Assets.at("libs/log4j-1.2.16.jar"),@routes.Assets.at("libs/yarf-0.2.jar"),@routes.Assets.at("libs/plugin.jar")' name="rfid" height="0" width="0"></applet>
 
@@ -36,21 +36,21 @@
             });
 
             function printResult(result) {
-                    printMessage("info","Reading successfull, Searching corresponding loan...");
-                    findLoanByBookId(2);
+                    printMessage("info","Reading successfull, Searching corresponding user...");
+                    findUserById(2);
             }
 
-            function findLoanByBookId(id) {
-                jsRoutes.controllers.PhysicalBooks.findPhysicalBookWithBook(id).ajax({
+            function findUserById(id) {
+                jsRoutes.controllers.Users.findUserById(id).ajax({
                     success: function(html){
-                        printMessage("success","Book found");
-                        $('#bookResult').html(html);
+                        printMessage("success","User found");
+                        $('#userResult').html(html);
                         showOKButton(id);
                     },
                    error:function() {
                         $("#read").removeClass("disabled");
                         $("#read").removeAttr("disabled");
-                        printMessage("error","Error, no book found");
+                        printMessage("error","Error, no user found");
                    } 
                 });
             }
@@ -58,14 +58,10 @@
             function showOKButton(id) {
                 $("#read").removeClass("disabled");
                 $("#read").removeAttr("disabled");
-                @if(action=="newLoan") {
-                    @if(contextLoan.ownerId.isDefined) {
-                        $("#close").attr("href",jsRoutes.controllers.Loans.newLoan(@contextLoan.ownerId.get,id).url);
-                    } else {
-                        $("#close").attr("href","/loans/new?bookId="+id);
-                    }
+                @if(contextLoan.bookId.isDefined) {
+                    $("#close").attr("href",jsRoutes.controllers.Loans.newLoan(id,@contextLoan.bookId.get).url);
                 } else {
-                    $("#close").attr("href",jsRoutes.controllers.Loans.returnLoan(id).url);
+                    $("#close").attr("href","/loans/new?ownerId="+id);
                 }
                 $("#close").show();
             }

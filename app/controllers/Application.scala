@@ -21,7 +21,10 @@ object Application extends Controller with Secured {
     Ok(
       Routes.javascriptRouter("jsRoutes")(
         Loans.findActiveLoanByPhysicalBookId,
-        Loans.returnLoan
+        Loans.returnLoan,
+        Loans.newLoan,
+        PhysicalBooks.findPhysicalBookWithBook,
+        Users.findUserById
       )
     ).as("text/javascript") 
   }

@@ -105,5 +105,11 @@ object Users extends Controller with Secured {
     val details=User.details(id)
     Ok(html.users.details(details.head._1,details))
   }
+
+  def findUserById(idUser:Long) = Action { implicit request =>
+    User.findById(idUser).map { user =>
+      Ok(html.users.showUser(user))
+    }.getOrElse(NotFound)
+  }
   
 }

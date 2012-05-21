@@ -1,0 +1,33 @@
+@(physicalbookWithBook: (PhysicalBook, Option[Book]))
+    
+@showPhysicalBook(physicalbookWithBook: (PhysicalBook, Option[Book])) = {
+    <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Copy id</th>
+                    <th>Isbn</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @physicalbookWithBook match { 
+                    case (physicalbook, book) => {
+                        <tr>
+                            <td>@physicalbook.id</td>
+                            <td>
+                                @book.map(_.isbn).getOrElse { <em>-</em> }
+                            </td>
+                            <td>
+                                @book.map(_.title).getOrElse { <em>-</em> }
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+    </table>
+}
+    
+@showPhysicalBook(physicalbookWithBook)
