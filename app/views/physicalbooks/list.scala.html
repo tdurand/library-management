@@ -47,6 +47,7 @@
                     @header(1, "Copy id")
                     <th>Isbn</th>
                     @header(2, "Book")
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,6 +62,7 @@
                             <td>
                                 @book.map(_.title).getOrElse { <em>-</em> }
                             </td>
+                            <td><a href="@routes.PhysicalBooks.tag(physicalbook.id.get.toLong)">Tag</a></td>
 
                         </tr>
                     }

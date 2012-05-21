@@ -79,5 +79,9 @@ object PhysicalBooks extends Controller {
       Ok(html.physicalbooks.showPhysicalBook(physicalbookWithBook))
     }.getOrElse(NotFound)
   }
+
+  def tag(id: Long) = Action {
+    Ok(html.books.tagBookRFID(id))
+  }
   
 }

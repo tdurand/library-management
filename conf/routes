@@ -21,11 +21,8 @@ GET     /books/new                  controllers.Books.create
 POST    /books                      controllers.Books.save
 
 # Edit existing Book
-GET     /books/:id/edit                  controllers.Books.edit(id:Long)
+GET     /books/:id/edit             controllers.Books.edit(id:Long)
 POST    /books/:id                  controllers.Books.update(id:Long)
-
-GET     /books/tag                  controllers.Books.tag
-GET     /books/untag                controllers.Books.untag
 
 # Delete a book
 POST    /books/:id/delete           controllers.Books.delete(id:Long)
@@ -36,6 +33,9 @@ GET     /copies                      controllers.PhysicalBooks.list(p:Int ?= 0, 
 
 # Get a copy by id
 GET     /copies/:id                 controllers.PhysicalBooks.findPhysicalBookWithBook(id:Long)
+
+# Tag a copy
+GET     /copies/:id/tag              controllers.PhysicalBooks.tag(id:Long)
 
 # Add Copy
 GET     /copies/new/:idBook        controllers.PhysicalBooks.create(idBook:Long)

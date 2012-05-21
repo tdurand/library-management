@@ -1,23 +1,25 @@
 @(id:Long)
 
-@main("users")("") {
-    @mainUsers("tag") {
+@main("books")("") {
+    @mainBooks("tag") {
 
-        <h1>Tag user card</h1>
+        <h1>Tag book</h1>
         <p></p>
 
-        <p>Please put your user card on the tag and press TAG</p>
-
-        <div class="alert alert-error print error" style="display:none"></div>
-        <div class="alert alert-success print success" style="display:none"></div>
-        <div class="alert alert-info print info" style="display:none"></div>
-
+        <p>Please put your user card on the tag and press TAG to tag this book:</p>
+        <p></p>
+        <div id="bookToTag"></div>
         <p></p>
         <input type="button" class="btn btn-large btn-primary" value="Tag" id="tag" />
         <p></p>
-        <div id="userResult"></div>
+        <div class="alert alert-error print error" style="display:none"></div>
+        <div class="alert alert-success print success" style="display:none"></div>
+        <div class="alert alert-info print info" style="display:none"></div>
+        
+        <p></p>
+        <div id="bookResult"></div>
 
-        <a id="ok" class="btn btn-large btn-success" href="@routes.Users.list()" style="display:none">Ok</a>
+        <a id="ok" class="btn btn-large btn-success" href="@routes.PhysicalBooks.list()" style="display:none">Ok</a>
 
         <applet mayscript="true" code = 'rfid/RFIDAccess.class' archive = '@routes.Assets.at("libs/applet-library-management-signed.jar"),@routes.Assets.at("libs/log4j-1.2.16.jar"),@routes.Assets.at("libs/yarf-0.2.jar"),@routes.Assets.at("libs/plugin.jar")' name="rfid" height="0" width="0"></applet>
 
@@ -54,12 +56,12 @@
                     $(".print."+status).show().text(message);
                 };
 
-                findUserById = function(id) {
-                    jsRoutes.controllers.Users.findUserById(id).ajax({
+                findBookById = function(id) {
+                    jsRoutes.controllers.PhysicalBooks.findPhysicalBookWithBook(id).ajax({
                         success: function(html){
                             if(id==@id) {
-                                printMessage("success","Tagging successfull of user card");
-                                $('#userResult').html(html);
+                                printMessage("success","Book successfull tagged");
+                                $('#bookResult').html(html);
                                 rfidActionDone();
                                 showOkButton();
                             }
@@ -74,20 +76,36 @@
                             printMessage("error","Tagging error, try again");
                        } 
                     });
-                }
+                };
+
+                displayBookToTag = function(id) {
+                    jsRoutes.controllers.PhysicalBooks.findPhysicalBookWithBook(id).ajax({
+                        success: function(html){
+                                $('#bookToTag').html(html);
+                            
+                        },
+                       error:function() {
+                            printMessage("error","This book doesn't exit, need to create it first");
+                       } 
+                    });
+                };
 
 
                 return {
                     init : function() {
                         settingHandlers();
+                        displayBookToTag(@id)
                     },
                     tag : function(id) {
                         rfidActionPerforming();
                         printMessage("info","Writing RFID Tag ...");
                         document.applets['rfid'].write(@id);
                     },
-                    findUserById : function(id) {
-                        findUserById(id)
+                    findBookById : function(id) {
+                        findBookById(id)
+                    },
+                    displayBookToTag : function(id) {
+                        displayBookToTag(id)
                     }
 
                 }
@@ -114,7 +132,7 @@
                     rfidActionDone();
                 }
                 else {
-                    RFID.main.findUserById(result);
+                    RFID.main.findBookById(result);
                 }
             }
 
