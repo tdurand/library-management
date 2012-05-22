@@ -48,6 +48,12 @@ object Book {
       SQL("select * from book where id = {id}").on('id -> id).as(Book.simple.singleOpt)
     }
   }
+
+  def findLastBookInsered():Option[Book]= {
+    DB.withConnection { implicit connection =>
+      SQL("select * from book order by id desc limit 1").as(Book.simple.singleOpt)
+    }
+  }
   
   /**
    * Update a book.

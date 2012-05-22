@@ -46,9 +46,9 @@ CREATE TABLE `Library` (
 -- ---
 
 ALTER TABLE `Book` ADD FOREIGN KEY (idLibrary) REFERENCES `Library` (`id`);
-ALTER TABLE `PhysicalBook` ADD FOREIGN KEY (idBook) REFERENCES `Book` (`id`);
+ALTER TABLE `PhysicalBook` ADD FOREIGN KEY (idBook) REFERENCES `Book` (`id`) ON DELETE CASCADE;
 ALTER TABLE `Loan` ADD FOREIGN KEY (idUser) REFERENCES `User` (`id`);
-ALTER TABLE `Loan` ADD FOREIGN KEY (idPhysicalBook) REFERENCES `PhysicalBook` (`id`);
+ALTER TABLE `Loan` ADD FOREIGN KEY (idPhysicalBook) REFERENCES `PhysicalBook` (`id`) ON DELETE CASCADE;
 ALTER TABLE `User` ADD FOREIGN KEY (idLibrary) REFERENCES `Library` (`id`);
 
 CREATE SEQUENCE book_seq start with 1000;
@@ -71,7 +71,7 @@ INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalboo
 INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',FALSE);
 
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
-INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','jpedro','test');
+INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','rcharlier','test');
 
 INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1000','1000','2001-02-16 20:14:12','2001-02-16 20:14:12',NULL);
 

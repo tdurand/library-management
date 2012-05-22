@@ -62,7 +62,9 @@
                             <td>
                                 @book.map(_.title).getOrElse { <em>-</em> }
                             </td>
-                            <td><a href="@routes.PhysicalBooks.tag(physicalbook.id.get.toLong)">Tag</a></td>
+                            <td><a href="@routes.PhysicalBooks.tag(physicalbook.id.get.toLong)">Tag</a> - 
+                                <a href="@routes.PhysicalBooks.delete(physicalbook.id.get.toLong)">Delete</a>
+                            </td>
 
                         </tr>
                     }

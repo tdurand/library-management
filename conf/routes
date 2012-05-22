@@ -38,7 +38,10 @@ GET     /copies                      controllers.PhysicalBooks.list(p:Int ?= 0, 
 GET     /copies/:id                 controllers.PhysicalBooks.findPhysicalBookWithBook(id:Long)
 
 # Tag a copy
-GET     /copies/:id/tag              controllers.PhysicalBooks.tag(id:Long)
+GET     /copies/:id/tag             controllers.PhysicalBooks.tag(id:Long)
+
+# Delete a copy
+GET     /copies/:id/delete          controllers.PhysicalBooks.delete(id:Long)
 
 # Add Copy
 GET     /copies/new/:idBook        controllers.PhysicalBooks.create(idBook:Long)

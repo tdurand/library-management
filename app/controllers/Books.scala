@@ -10,6 +10,7 @@ import play.api.libs.json._
 import anorm._
 import views._
 import models.GoogleBook
+import models.PhysicalBook
 
 object Books extends Controller with Secured {
   
@@ -20,17 +21,23 @@ object Books extends Controller with Secured {
   
   /**
    * Describe the book form (used in both edit and create screens).
-   */ 
+   */
+
   val bookForm = Form(
     mapping(
       "id" -> ignored(NotAssigned:Pk[Long]),
       "title" -> nonEmptyText,
       "isbn" -> nonEmptyText,
       "copies" -> optional(number)
-    )
-    ((id, title, isbn, _) => Book(id,title,isbn))
-    ((book: Book) => Some(book.id, book.title, book.isbn,Option(0)))
+    ){
+        (id, title, isbn, copies) => (Book(id,title,isbn),copies)
+    }
+    { 
+        case(book, copies) => Some(book.id, book.title, book.isbn,copies)
+    } 
   )
+
+
   
   def index = Action { Home }
   
@@ -55,7 +62,7 @@ object Books extends Controller with Secured {
    */
   def edit(id: Long) = IsAuthenticated { implicit user => implicit request =>
     Book.findById(id).map { book =>
-      Ok(html.books.editForm(id, bookForm.fill(book)))
+      Ok(html.books.editForm(id, bookForm.fill(book,None)))
     }.getOrElse(NotFound)
   }
   
@@ -68,8 +75,8 @@ object Books extends Controller with Secured {
     bookForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.books.editForm(id, formWithErrors)),
       book => {
-        Book.update(id, book)
-        Home.flashing("success" -> "Book %s has been updated".format(book.isbn))
+        Book.update(id, book._1)
+        Home.flashing("success" -> "Book %s has been updated".format(book._1.isbn))
       }
     )
   }
@@ -88,8 +95,14 @@ object Books extends Controller with Secured {
     bookForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.books.createForm(formWithErrors)),
       book => {
-        Book.insert(book)
-        Home.flashing("success" -> "Book %s : %s has been created".format(book.isbn,book.title))
+        Book.insert(book._1)
+        val lastBook=Book.findLastBookInsered()
+        book._2.map { copies =>
+            for( i <- 1 to copies) {
+                PhysicalBook.insert(PhysicalBook(NotAssigned,lastBook.get.id.get.toLong))
+            }
+        }
+        Home.flashing("success" -> "Book %s : %s has been created".format(book._1.isbn,book._1.title))
       }
     )
   }
