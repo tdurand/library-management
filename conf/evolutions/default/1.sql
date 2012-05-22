@@ -55,7 +55,7 @@ CREATE SEQUENCE book_seq start with 1000;
 CREATE SEQUENCE physicalbook_seq start with 1000;
 CREATE SEQUENCE loan_seq start with 1000;
 CREATE SEQUENCE user_seq start with 1000;
-CREATE SEQUENCE library_seq start with 1000;
+CREATE SEQUENCE library_seq start with 1;
 
 INSERT INTO `Library` VALUES (nextval('library_seq'),'Default');
 
@@ -63,15 +63,15 @@ INSERT INTO `Library` VALUES (nextval('library_seq'),'Default');
 -- Test Data
 -- ---
 
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','The Girl With the Dragon Tattoo','1847245455');
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','The Girl Who Played With Fire','1847248977');
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','The Girl Who Kicked the Hornets Nest','1906694419');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','The Girl With the Dragon Tattoo','1847245455');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','The Girl Who Played With Fire','1847248977');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','The Girl Who Kicked the Hornets Nest','1906694419');
 
 INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',TRUE);
 INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',FALSE);
 
-INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1000','tdurand','test');
-INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1000','jpedro','test');
+INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
+INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','jpedro','test');
 
 INSERT INTO `Loan` (`id`,`idUser`,`idPhysicalBook`,`dateBorrowed`,`dateDue`,`dateReturned`) VALUES (nextval('loan_seq'),'1000','1000','2001-02-16 20:14:12','2001-02-16 20:14:12',NULL);
 
