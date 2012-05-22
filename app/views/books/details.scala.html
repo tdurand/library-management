@@ -1,17 +1,27 @@
-@(googlebook:GoogleBook)(implicit user: String)
+@(googlebook:Option[GoogleBook])(implicit user: String)
 
 @main("books") {
     @mainBooks("") {
-        <h1>@googlebook.title</h1>
+
+        @googlebook match {
+            case None => {
+                <h1>Book details</h1>
+                <div class="alert alert-error"><strong>Error</strong> unable to fetch information about this book</div> 
+            }
+            case Some(_) => { 
+                <h1>@googlebook.get.title</h1>
         
-        <div class="row book-details description">
-            <div class="span2 thumbnail"><img src="@googlebook.thumbnail" alt="Thumnail"></div>
-            <div class="span6 text" class=>
-                <p><i>@googlebook.authors.map { author =>
-                    @author
-                } (@googlebook.publishedDate)</i></p>
-                <p>@googlebook.description</p>
-            </div>
-        </div>
+                <div class="row book-details description">
+                    <div class="span2 thumbnail"><img src="@googlebook.get.thumbnail" alt="Thumnail"></div>
+                    <div class="span6 text" class=>
+                        <p><i>@googlebook.get.authors.map { author =>
+                            @author
+                        } (@googlebook.get.publishedDate)</i></p>
+                        <p>@googlebook.get.description</p>
+                    </div>
+                </div>
+            }
+        }
+        
     }
 }

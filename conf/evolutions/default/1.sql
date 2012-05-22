@@ -63,9 +63,9 @@ INSERT INTO `Library` VALUES (nextval('library_seq'),'Default');
 -- Test Data
 -- ---
 
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','Millénium 1','1847245455');
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','Millénium 2','1847248977');
-INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','Millénium 3','1906694419');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','The Girl With the Dragon Tattoo','1847245455');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','The Girl Who Played With Fire','1847248977');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1000','The Girl Who Kicked the Hornets Nest','1906694419');
 
 INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',TRUE);
 INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',FALSE);

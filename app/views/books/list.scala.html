@@ -58,9 +58,9 @@
                                     <td>@book.title</td>
                                     <td>@nbCopies.getOrElse { <em>-</em> }</td>
                                     <td>
+                                    <a href="@routes.Books.details(book.isbn)">Details</a> -
                                     <a href="@routes.Books.edit(book.id.get)">Edit</a> -
-                                    <a href="@routes.PhysicalBooks.create(book.id.get)">Add a copy</a> -
-                                    <a href="@routes.Books.details(book.isbn)">Details</a> 
+                                    <a href="@routes.PhysicalBooks.create(book.id.get)">Add a copy</a>
                                     </td>
                                 </tr>
                             }
