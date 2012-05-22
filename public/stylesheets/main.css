@@ -136,4 +136,14 @@ table.listitems .header a {
     background-image:url(/assets/images/icons/rfid64.png);
 }
 
+.book-details.description {
+    margin-top:10px;
+}
+.book-details.description .thumbnail {
+    text-align:center;
+}
+.book-details.description .text {
+    text-align:justify;
+}
+
 

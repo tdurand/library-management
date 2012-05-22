@@ -9,6 +9,7 @@ import play.api.libs.ws.WS
 import play.api.libs.json._
 import anorm._
 import views._
+import models.GoogleBook
 
 object Books extends Controller with Secured {
   
@@ -102,10 +103,11 @@ object Books extends Controller with Secured {
   }
 
   def details(isbn:String) = IsAuthenticated { implicit user => request =>
-    val feedUrl="https://www.googleapis.com/books/v1/volumes?q=isbn:0307269752&key=AIzaSyA_V_6aDqEZn2ONXAQ9VHIDASU-5l5YFAE"
+    val feedUrl="https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn+"&key=AIzaSyA_V_6aDqEZn2ONXAQ9VHIDASU-5l5YFAE"
     Async {
     WS.url(feedUrl).get().map { response =>
-      Ok((response.json \ "kind").as[String])
+      val googleBook = Json.parse(response.json.toString).as[GoogleBook]
+      Ok(html.books.details(googleBook))
     }
   }  
   }

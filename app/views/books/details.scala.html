@@ -1,3 +1,17 @@
-@(json:String)
+@(googlebook:GoogleBook)(implicit user: String)
 
-<p>@json</p>
+@main("books") {
+    @mainBooks("") {
+        <h1>@googlebook.title</h1>
+        
+        <div class="row book-details description">
+            <div class="span2 thumbnail"><img src="@googlebook.thumbnail" alt="Thumnail"></div>
+            <div class="span6 text" class=>
+                <p><i>@googlebook.authors.map { author =>
+                    @author
+                } (@googlebook.publishedDate)</i></p>
+                <p>@googlebook.description</p>
+            </div>
+        </div>
+    }
+}
