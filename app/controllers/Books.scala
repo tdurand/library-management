@@ -129,5 +129,22 @@ object Books extends Controller with Secured {
         }
     }  
   }
+
+  def detailsById(id:Long) = IsAuthenticated { implicit user => request =>
+        PhysicalBook.findByIdWithBook(id).map { physicalbookWithBook =>
+            val feedUrl="https://www.googleapis.com/books/v1/volumes?q=isbn:"+physicalbookWithBook._2.get.isbn+"&key=AIzaSyA_V_6aDqEZn2ONXAQ9VHIDASU-5l5YFAE"
+            Async {
+                WS.url(feedUrl).get().map { response =>
+                  if((response.json \ "totalItems").as[Int]==1) {
+                    val googleBook = Json.parse(response.json.toString).as[GoogleBook]
+                    Ok(html.books.details(Some(googleBook)))
+                  }
+                  else {
+                    Ok(html.books.details(None))
+                  }
+                }
+            }  
+        }.getOrElse(NotFound)
+  }
   
 }

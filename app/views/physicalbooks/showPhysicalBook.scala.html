@@ -15,7 +15,7 @@
                     case (physicalbook, book) => {
                         <tr>
                             <td>@physicalbook.id</td>
-                            <td>
+                            <td class="isbn">
                                 @book.map(_.isbn).getOrElse { <em>-</em> }
                             </td>
                             <td>

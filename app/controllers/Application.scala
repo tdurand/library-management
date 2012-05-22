@@ -24,7 +24,9 @@ object Application extends Controller with Secured {
         Loans.returnLoan,
         Loans.newLoan,
         PhysicalBooks.findPhysicalBookWithBook,
-        Users.findUserById
+        Users.findUserById,
+        Books.details,
+        Books.detailsById
       )
     ).as("text/javascript") 
   }

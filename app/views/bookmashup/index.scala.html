@@ -1,0 +1,73 @@
+@()(implicit user:String)
+
+@main("bookinformations") {
+
+
+     <h1>Book information from RFID</h1>
+        <p></p>
+
+        <p>Please put your book on the reader and press READ</p>
+
+        <div class="alert alert-error print error" style="display:none"></div>
+        <div class="alert alert-success print success" style="display:none"></div>
+        <div class="alert alert-info print info" style="display:none"></div>
+
+        <p></p>
+        <input type="button" class="btn btn-large btn-primary" value="Read" id="read" />
+        <p></p>
+        <div id="bookResult">
+            
+        </div>
+
+        <applet mayscript="true" code = 'rfid/RFIDAccess.class' archive = '@routes.Assets.at("libs/applet-library-management-signed.jar"),@routes.Assets.at("libs/log4j-1.2.16.jar"),@routes.Assets.at("libs/yarf-0.2.jar"),@routes.Assets.at("libs/plugin.jar")' name="rfid" height="0" width="0"></applet>
+
+
+        <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $("#read").click(function(){
+                    $(this).addClass("disabled");
+                    $(this).attr("disabled","disabled");
+                    $("#close").hide()
+                    $("#readStatus").text("Reading ...")
+                    document.applets['rfid'].read();
+                });
+
+                
+            });
+
+            function printResult(result) {
+                    printMessage("info","Reading successfull, Searching corresponding information...");
+                    findBookInformations(result);
+            }
+
+            function findBookInformations(id) {
+                jsRoutes.controllers.Books.detailsById(id).ajax({
+                    success: function(html){
+                        printMessage("success","Book found");
+                        $('#bookResult').html($(html).find(".bookmashup"));
+                        showOKButton(id);
+                    },
+                   error:function() {
+                        $("#read").removeClass("disabled");
+                        $("#read").removeAttr("disabled");
+                        $('#bookResult').html("");
+                        printMessage("error","Error, no book found");
+                   } 
+                });
+            }
+
+            function showOKButton(id) {
+                $("#read").removeClass("disabled");
+                $("#read").removeAttr("disabled");
+            }
+
+            function printMessage(status,message) {
+                $(".print").hide();
+                $(".print."+status).show().text(message);
+            }
+
+
+
+        </script>
+    
+}

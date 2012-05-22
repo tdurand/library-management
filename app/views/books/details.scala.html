@@ -6,11 +6,14 @@
         @googlebook match {
             case None => {
                 <h1>Book details</h1>
-                <div class="alert alert-error"><strong>Error</strong> unable to fetch information about this book</div> 
+                <div class="bookmashup">
+                <div class="alert alert-error"><strong>Error</strong> unable to fetch information about this book</div>
+                </div> 
             }
             case Some(_) => { 
+                <div class="bookmashup">
                 <h1>@googlebook.get.title</h1>
-        
+                
                 <div class="row book-details description">
                     <div class="span2 thumbnail"><img src="@googlebook.get.thumbnail" alt="Thumnail"></div>
                     <div class="span6 text" class=>
@@ -19,6 +22,7 @@
                         } (@googlebook.get.publishedDate)</i></p>
                         <p>@googlebook.get.description</p>
                     </div>
+                </div>
                 </div>
             }
         }

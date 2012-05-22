@@ -136,6 +136,11 @@ table.listitems .header a {
     background-image:url(/assets/images/icons/rfid64.png);
 }
 
+.icon.icon-bookmashup {
+    background-image:url(/assets/images/icons/zoom128.png);
+}
+
+
 .book-details.description {
     margin-top:10px;
 }
