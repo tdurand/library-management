@@ -24,6 +24,9 @@ POST    /books                      controllers.Books.save
 GET     /books/:id/edit             controllers.Books.edit(id:Long)
 POST    /books/:id                  controllers.Books.update(id:Long)
 
+# Book details
+GET     /books/:isbn/details          controllers.Books.details(isbn:String)
+
 # Delete a book
 POST    /books/:id/delete           controllers.Books.delete(id:Long)
 
@@ -96,6 +99,7 @@ POST    /loans                      controllers.Loans.save
 
 # Return Book
 POST    /loans/close                controllers.Loans.close
+
 
 # Javascript routing
 GET     /assets/javascripts/routes  controllers.Application.javascriptRoutes

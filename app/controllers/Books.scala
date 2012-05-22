@@ -5,6 +5,8 @@ import play.api.mvc._
 import models.Book
 import play.api.data._
 import play.api.data.Forms._
+import play.api.libs.ws.WS
+import play.api.libs.json._
 import anorm._
 import views._
 
@@ -97,6 +99,15 @@ object Books extends Controller with Secured {
   def delete(id: Long) = IsAuthenticated { implicit user => implicit request =>
     Book.delete(id)
     Home.flashing("success" -> "Book has been deleted")
+  }
+
+  def details(isbn:String) = IsAuthenticated { implicit user => request =>
+    val feedUrl="https://www.googleapis.com/books/v1/volumes?q=isbn:0307269752&key=AIzaSyA_V_6aDqEZn2ONXAQ9VHIDASU-5l5YFAE"
+    Async {
+    WS.url(feedUrl).get().map { response =>
+      Ok((response.json \ "kind").as[String])
+    }
+  }  
   }
   
 }
