@@ -119,6 +119,7 @@ object Books extends Controller with Secured {
     val feedUrl="https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn+"&key=AIzaSyA_V_6aDqEZn2ONXAQ9VHIDASU-5l5YFAE"
     Async {
         WS.url(feedUrl).get().map { response =>
+          println(response.json.toString)
           if((response.json \ "totalItems").as[Int]==1) {
             val googleBook = Json.parse(response.json.toString).as[GoogleBook]
             Ok(html.books.details(Some(googleBook)))
