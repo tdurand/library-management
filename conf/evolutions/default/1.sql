@@ -66,9 +66,11 @@ INSERT INTO `Library` VALUES (nextval('library_seq'),'Default');
 INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','The Girl With the Dragon Tattoo','1847245455');
 INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','The Girl Who Played With Fire','1847248977');
 INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','The Girl Who Kicked the Hornets Nest','1906694419');
+INSERT INTO `Book` (`id`,`idLibrary`,`title`,`isbn`) VALUES (nextval('book_seq'),'1','Le Portugais du Brésil','2700502760');
 
 INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',TRUE);
 INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1000',FALSE);
+INSERT INTO `PhysicalBook` (`id`,`idBook`,`loaned`) VALUES (nextval('physicalbook_seq'),'1003',FALSE);
 
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','tdurand','test');
 INSERT INTO `User` (`id`,`idLibrary`,`login`,`password`) VALUES (nextval('user_seq'),'1','rcharlier','test');

@@ -10,7 +10,7 @@ case class GoogleBook(title : String,
                       authors: List[String],
                       publishedDate : String,
                       description: String,
-                      thumbnail:String)
+                      thumbnail:Option[String])
 
 object GoogleBook {
     
@@ -23,7 +23,7 @@ object GoogleBook {
                         (volume \ "authors").as[List[String]],
                         (volume \ "publishedDate").as[String],
                         (volume \ "description").as[String],
-                        (volume \\ "thumbnail").head.as[String]
+                        (volume \\ "thumbnail").headOption.map(_.as[String])
                     )
                 }
             }
